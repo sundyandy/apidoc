@@ -16,7 +16,23 @@
         "issues": "https://github.com/sundyandy/apidoc/issues"
     },
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "topthink/framework": "5.0.9",
+        "topthink/think-image": "^1.0",
+        "topthink/think-migration": "^1.0",
+        "topthink/think-captcha": "^1.0",
+        "topthink/think-mongo": "^1.0",
+        "topthink/think-testing": "^1.0",
+        "topthink/think-worker": "^1.0",
+        "topthink/think-helper": "^1.0",
+        "topthink/think-queue": "^1.0",
+        "topthink/think-angular": "^1.0"
+    },
+    "extra": {
+      "think-path": "thinkphp"
+    },
+    "config": {
+      "preferred-install": "dist"
     },
     "minimum-stability": "stable"
 }
