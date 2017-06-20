@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{block name="title"}网站标题{/block}</title>
+    <link href="__STATIC__/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__STATIC__/css/common.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6"><h1>{block name="sub_title"}网站标题{/block}</h1></div>
+        <div class="col-md-6"><h5 class="text-right">欢迎使用 {$Think.session.realname}    <a href="{:url('user/logout')}">退出登录</a></h5></div>
+    </div>
+
+    <div class="row">
+        {block name="content"}{/block}
+    </div>
+
+    <div class="row">
+        <div class="col-md-12"><h5 class="text-center">copy right</h5></div>
+    </div>
+</div>
+</body>
+</html>

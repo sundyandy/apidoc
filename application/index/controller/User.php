@@ -37,7 +37,11 @@ class User extends Base
         }
     }
 
-
+    /**
+     * 登录
+     * @param Request $request
+     * @return \think\response\View
+     */
     public function login(Request $request){
         if(request()->isPost()){
             $userService = new \app\index\service\User();
@@ -61,4 +65,13 @@ class User extends Base
             return view('/user/login');
         }
     }
+
+    /**
+     * 登出
+     */
+    public function logout(){
+        Session::clear();
+        return redirect('user/login');
+    }
+
 }

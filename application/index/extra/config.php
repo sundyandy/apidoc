@@ -10,5 +10,11 @@ return [
     'view_replace_str'  =>  [
         '__PUBLIC__'=>'/public',
         '__ROOT__' => '/',
-    ]
+    ],
+
+    'no_login_check' => [
+        'user/login',
+        'user/logout',
+        'user/reg',
+    ],
 ];
