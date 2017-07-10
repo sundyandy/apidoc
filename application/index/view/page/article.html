@@ -34,9 +34,9 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <input type="hidden" name="project_id" value="{$projectInfo.id}">
+                <input type="hidden" name="project_id" value="{$project_info.id}">
                 <input type="hidden" name="page_id" value="{$page_id}">
-                <input type="hidden" name="db_id" value="{$db_info.info.id}">
+                <input type="hidden" name="db_id" value="{$article_info.info.id}">
                 <button type="submit" class="btn btn-success btn-block btn-lg">编辑文档</button>
                 <br>
                 <a href="{:url('/tools/createdMDDbDoc')}" target="_blank">
