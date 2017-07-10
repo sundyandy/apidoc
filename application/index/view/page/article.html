@@ -1,7 +1,7 @@
 {extend name="base/base" /}
 
 {block name="title"}管理文档{/block}
-{block name="sub_title"}文章管理{/block}
+{block name="sub_title"}文章管理 &nbsp;&nbsp;<small><a href="{:url('/project/menu',['project_id'=>$project_info.id])}">返回</a></small>{/block}
 
 {block name="content"}
 <link rel="stylesheet" type="text/css" href="__STATIC__/markdown/css/editormd.css">

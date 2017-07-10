@@ -276,7 +276,7 @@ class Project extends Base
             //输出
             return view('/page/api',
                 [
-                    'projectInfo'=>$projectInfo,
+                    'project_info'=>$projectInfo,
                     'page_info'=>$pageInfo,
                     'api_info'=>$apiInfo,
                     'page_id'=>$pageID,

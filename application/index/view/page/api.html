@@ -1,7 +1,7 @@
 {extend name="base/base" /}
 
 {block name="title"}管理文档{/block}
-{block name="sub_title"}api管理{/block}
+{block name="sub_title"}api管理&nbsp;&nbsp;<small><a href="{:url('/project/menu',['project_id'=>$project_info.id])}">返回</a></small>{/block}
 
 {block name="content"}
 <div class="col-md-12">
@@ -193,7 +193,7 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <input type="hidden" name="project_id" value="{$projectInfo.id}">
+                <input type="hidden" name="project_id" value="{$project_info.id}">
                 <input type="hidden" name="page_id" value="{$page_id}">
                 <input type="hidden" name="api_id" value="{$api_info.info.id}">
                 <button type="submit" class="btn btn-success btn-block btn-lg">编辑文档</button>
