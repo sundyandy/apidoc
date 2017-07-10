@@ -136,4 +136,14 @@ class Project extends Model
         }
         return true;
     }
+
+    public function getProjectOperateLog($projectID){
+        return db('project_operate_log')
+            ->join('project_page','project_page.id = project_operate_log.page_id')
+            ->join('user','user.id = project_operate_log.operator_id')
+            ->field(['project_operate_log.*,project_page.title,user.realname'])
+            ->where(['project_operate_log.project_id' => $projectID])
+            ->order('id desc')
+            ->select();
+    }
 }

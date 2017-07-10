@@ -224,4 +224,5 @@ class Page extends Model
     public function getProjectApiRequest($id){
         return db('project_api_request')->find($id);
     }
+
 }

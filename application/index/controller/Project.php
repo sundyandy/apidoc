@@ -64,23 +64,23 @@ class Project extends Base
         //页面
         $pageID = Request::instance()->param('page_id');
         if(!$pageID){
-            $getDefault = $menuService->getDefault($projectID);
-            if(empty($getDefault)){
-                $pageID = 0;
-            }else{
-                $pageID = $getDefault['id'];
-            }
+            //显示操作记录
+            $getDefault = $projectService->getProjectOperateLog($projectID);
+            return view('/page/default',
+                [
+                    'projectInfo'=>$projectInfo,
+                    'menu_list'=>$projectMenu,
+                    'auth' => $auth,
+                    'content' => $getDefault
+                ]
+            );
+        }else{
+
         }
 
 
         //输出
-        return view('/project/info',
-            [
-                'projectInfo'=>$projectInfo,
-                'menu_list'=>$projectMenu,
-                'auth' => $auth
-            ]
-        );
+
     }
 
 
