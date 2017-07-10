@@ -194,8 +194,8 @@ class Project extends Base
         if($type == '1'){
             $this->redirect(url('project/apiDocEdit',['page_id'=>$pageID]));
         }
-        if($type == '2'){
-            $this->redirect(url('project/dbDocEdit',['page_id'=>$pageID]));
+        if($type == '4'){
+            $this->redirect(url('project/articleEdit',['page_id'=>$pageID]));
         }
     }
 
@@ -287,17 +287,17 @@ class Project extends Base
     }
 
     /**
-     * 数据字典
+     * 文章
      * @param Request $request
      * @return \think\response\View
      */
-    public function dbDocEdit(Request $request){
+    public function articleEdit(Request $request){
         $projectService = new \app\index\service\Project();
         $menuService = new \app\index\service\Menu();
         $pageService = new \app\index\service\Page();
         if(request()->isPost()){
             //基础信息
-            $dbInfo = [
+            $articleInfo = [
                 'project_id' => input('post.project_id'),
                 'page_id' => input('post.page_id'),
                 'description' => input('post.description',''),
@@ -305,7 +305,7 @@ class Project extends Base
                 'create_user_id' => session('user_id'),
                 'db_id' => input('post.db_id',0),
             ];
-            $pageService->addDbInfo($dbInfo);
+            $pageService->addArticle($articleInfo);
             $this->success('编辑成功');
         }else{
             //页面详情
@@ -325,14 +325,14 @@ class Project extends Base
                 $this->error('无权限查看本项目');
             }
 
-            //db基本信息
-            $dbInfo = $pageService->getDbDoc($pageInfo['project_id'],$pageID);
+            //基本信息
+            $articleInfo = $pageService->getArticle($pageInfo['project_id'],$pageID);
             //输出
-            return view('/page/db',
+            return view('/page/article',
                 [
-                    'projectInfo'=>$projectInfo,
+                    'project_info'=>$projectInfo,
                     'page_info'=>$pageInfo,
-                    'db_info'=>$dbInfo,
+                    'article_info'=>$articleInfo,
                     'page_id'=>$pageID,
                 ]
             );

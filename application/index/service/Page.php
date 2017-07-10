@@ -147,15 +147,15 @@ class Page extends Model
     }
 
     /**
-     * 获取数据字典
+     * 获取文章
      * @param $projectID
      * @param $pageID
      * @return mixed
      */
-    public function getDbDoc($projectID,$pageID){
+    public function getArticle($projectID,$pageID){
         $userService = new \app\index\service\User();
         //基本信息
-        $db['info'] = db('project_db')
+        $db['info'] = db('project_document')
             ->where(
                 [
                     'project_id' => $projectID,
@@ -172,14 +172,14 @@ class Page extends Model
      * @param $dbArray
      * @return int|string
      */
-    public function addDbInfo($dbArray){
+    public function addArticle($dbArray){
         $id = $dbArray['db_id'];
         unset($dbArray['db_id']);
         if(!empty($id)){
-            db('project_db')->where(['id'=>$id])->update($dbArray);
+            db('project_document')->where(['id'=>$id])->update($dbArray);
             return $id;
         }else{
-            return db('project_db')->insertGetId($dbArray);
+            return db('project_document')->insertGetId($dbArray);
         }
     }
 
