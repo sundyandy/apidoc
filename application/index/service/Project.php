@@ -11,6 +11,10 @@ use think\Model;
 
 class Project extends Model
 {
+    const OPERATE_TYPE_ADD = 'add';
+    const OPERATE_TYPE_MODIFY = 'modify';
+    const OPERATE_TYPE_DEL = 'del';
+
     /**
      * @param $projectArray
      * @return int|string
@@ -96,4 +100,40 @@ class Project extends Model
         return $auth;
     }
 
+
+    /**
+     * 添加操作记录
+     * @param $pageID
+     * @param $type
+     * @return bool
+     */
+    public function addOperateLog($pageID,$type){
+        $menuService = new \app\index\service\Menu();
+        $projectInfo = $menuService->info($pageID);
+        $projectID = $projectInfo['project_id'];
+        $operatorID = session('user_id');
+        $operateDate = date('Y-m-d');
+        $check = db('project_operate_log')
+            ->where(
+                [
+                    'project_id' => $projectID,
+                    'page_id' => $pageID,
+                    'operator_id' => $operatorID,
+                    'operator_date' => $operateDate,
+                    'type' => $type
+                ]
+            )
+            ->find();
+        if(empty($check)){
+            $add = [
+                'project_id' => $projectID,
+                'page_id' => $pageID,
+                'operator_id' => $operatorID,
+                'operator_date' => $operateDate,
+                'type' => $type
+            ];
+            db('project_operate_log')->insertGetId($add);
+        }
+        return true;
+    }
 }

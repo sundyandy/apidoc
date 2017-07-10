@@ -116,9 +116,13 @@ class Menu extends Model
             'status' => 0,
             'deleted_at' => date('Y-m-d H:i:s'),
         ];
-        return db('project_page')
+        $del = db('project_page')
             ->where(['id'=>$menuID])
             ->update($del);
+        //写log
+        $projectService = new \app\index\service\Project();
+        $projectService->addOperateLog($menuID,$projectService::OPERATE_TYPE_DEL);
+        return $del;
     }
 
     /**

@@ -120,10 +120,19 @@ class Page extends Model
         $id = $apiArray['api_id'];
         unset($apiArray['api_id']);
         if(!empty($id)){
-            db('project_api')->where(['id'=>$id])->update($apiArray);
+            $edit = db('project_api')->where(['id'=>$id])->update($apiArray);
+            if($edit){
+                //写log
+                $projectService = new \app\index\service\Project();
+                $projectService->addOperateLog($apiArray['page_id'],$projectService::OPERATE_TYPE_MODIFY);
+            }
             return $id;
         }else{
-            return db('project_api')->insertGetId($apiArray);
+            $id = db('project_api')->insertGetId($apiArray);
+            //写log
+            $projectService = new \app\index\service\Project();
+            $projectService->addOperateLog($apiArray['page_id'],$projectService::OPERATE_TYPE_ADD);
+            return $id;
         }
     }
 
@@ -143,7 +152,15 @@ class Page extends Model
      * @return int|string
      */
     public function editApiRequest($id,$requestArray){
-        return db('project_api_request')->where(['id'=>$id])->update($requestArray);
+        $edit = db('project_api_request')->where(['id'=>$id])->update($requestArray);
+        if($edit){
+            //写log
+            $apiRequestInfo = $this->getProjectApiRequest($id);
+            $apiInfo = $this->getProjectApi($apiRequestInfo['api_id']);
+            $projectService = new \app\index\service\Project();
+            $projectService->addOperateLog($apiInfo['page_id'],$projectService::OPERATE_TYPE_MODIFY);
+        }
+        return $edit;
     }
 
     /**
@@ -172,16 +189,39 @@ class Page extends Model
      * @param $dbArray
      * @return int|string
      */
-    public function addArticle($dbArray){
-        $id = $dbArray['db_id'];
-        unset($dbArray['db_id']);
+    public function addArticle($articleArray){
+        $id = $articleArray['db_id'];
+        unset($articleArray['db_id']);
         if(!empty($id)){
-            db('project_document')->where(['id'=>$id])->update($dbArray);
+            $edit = db('project_document')->where(['id'=>$id])->update($articleArray);
+            if($edit){
+                //写log
+                $projectService = new \app\index\service\Project();
+                $projectService->addOperateLog($articleArray['page_id'],$projectService::OPERATE_TYPE_MODIFY);
+            }
             return $id;
         }else{
-            return db('project_document')->insertGetId($dbArray);
+            $id = db('project_document')->insertGetId($articleArray);
+            //写log
+            $projectService = new \app\index\service\Project();
+            $projectService->addOperateLog($articleArray['page_id'],$projectService::OPERATE_TYPE_ADD);
+            return $id;
         }
     }
 
+    /**
+     * @param $id
+     * @return array|false|\PDOStatement|string|Model
+     */
+    public function getProjectApi($id){
+        return db('project_api')->find($id);
+    }
 
+    /**
+     * @param $id
+     * @return array|false|\PDOStatement|string|Model
+     */
+    public function getProjectApiRequest($id){
+        return db('project_api_request')->find($id);
+    }
 }
