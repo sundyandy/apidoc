@@ -30,7 +30,7 @@ class CreateProjectDocumentTable extends Migrator
     public function change()
     {
         // create the table
-        $table = $this->table('project_document',array('comment' => '错误码'));
+        $table = $this->table('project_document',array('comment' => '文章'));
         $table
             ->addColumn('project_id', 'integer',
                 array(
