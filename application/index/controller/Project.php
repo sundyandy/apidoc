@@ -188,14 +188,19 @@ class Project extends Base
         }
     }
 
+    public function editPage(Request $request){
+        $pageID = Request::instance()->param('id');
+        $type = Request::instance()->param('type');
+        if($type == '1'){
+            $this->redirect(url('project/apiDocEdit',['page_id'=>$pageID]));
+        }
+    }
+
     public function apiDocEdit(Request $request){
         $projectService = new \app\index\service\Project();
         $menuService = new \app\index\service\Menu();
         $pageService = new \app\index\service\Page();
         if(request()->isPost()){
-            ############ for test ############
-//            echo '<pre>';print_r(input("post."));die('###');
-            ############ for test ############
             //基础信息
             $apiInfo = [
                 'project_id' => input('post.project_id'),

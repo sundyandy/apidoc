@@ -16,7 +16,7 @@
                         <button type="button" class="btn btn-primary btn-sm margin10">添加下级</button>
                         </a>
                         {else}
-                        <a href="">
+                        <a href="{:url('/project/editPage/',['type'=>$vo.type,'id'=>$vo.id])}">
                         <button type="button" class="btn btn-success btn-sm margin10">编辑内容</button>
                         </a>
                     {/eq}
@@ -34,7 +34,7 @@
                                     <a href="#" data-toggle="modal" data-target="#addLevel1" data-preid="{$child.id}" data-prename="{$child.title}" data-type="{$child.type}" onclick="getInfo(this)" data-level="{$child.level}">
                                     <button type="button" class="btn btn-primary btn-sm margin10">添加下级</button>
                                         {else}
-                                    <a href="">
+                                    <a href="{:url('/project/editPage/',['type'=>$child.type,'id'=>$child.id])}">
                                         <button type="button" class="btn btn-success btn-sm margin10">编辑内容</button>
                                     </a>
                                     {/eq}
@@ -56,7 +56,7 @@
                                             <button type="button" class="btn btn-danger btn-sm margin10">删除</button>
                                         </a>
                                         {neq name="childchild.type" value="5"}
-                                        <a href="">
+                                        <a href="{:url('/project/editPage/',['type'=>$childchild.type,'id'=>$childchild.id])}">
                                             <button type="button" class="btn btn-success btn-sm margin10">编辑内容</button>
                                         </a>
                                         {/neq}
