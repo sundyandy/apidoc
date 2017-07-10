@@ -75,7 +75,7 @@ class CreateProjectApiTable extends Migrator
             )
             ->addColumn('create_user_id', 'integer',
                 array(
-                    'length' => MysqlAdapter::INT_TINY,
+                    'length' => MysqlAdapter::INT_REGULAR,
                     'comment' => '创建者id',
                 )
             )

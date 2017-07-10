@@ -194,8 +194,16 @@ class Project extends Base
         if($type == '1'){
             $this->redirect(url('project/apiDocEdit',['page_id'=>$pageID]));
         }
+        if($type == '2'){
+            $this->redirect(url('project/dbDocEdit',['page_id'=>$pageID]));
+        }
     }
 
+    /**
+     * api文档
+     * @param Request $request
+     * @return \think\response\View
+     */
     public function apiDocEdit(Request $request){
         $projectService = new \app\index\service\Project();
         $menuService = new \app\index\service\Menu();
@@ -271,6 +279,60 @@ class Project extends Base
                     'projectInfo'=>$projectInfo,
                     'page_info'=>$pageInfo,
                     'api_info'=>$apiInfo,
+                    'page_id'=>$pageID,
+                ]
+            );
+        }
+
+    }
+
+    /**
+     * 数据字典
+     * @param Request $request
+     * @return \think\response\View
+     */
+    public function dbDocEdit(Request $request){
+        $projectService = new \app\index\service\Project();
+        $menuService = new \app\index\service\Menu();
+        $pageService = new \app\index\service\Page();
+        if(request()->isPost()){
+            //基础信息
+            $dbInfo = [
+                'project_id' => input('post.project_id'),
+                'page_id' => input('post.page_id'),
+                'description' => input('post.description',''),
+                'content' => input('post.content',''),
+                'create_user_id' => session('user_id'),
+                'db_id' => input('post.db_id',0),
+            ];
+            $pageService->addDbInfo($dbInfo);
+            $this->success('编辑成功');
+        }else{
+            //页面详情
+            $pageID = Request::instance()->param('page_id');
+            $pageInfo = $menuService->info($pageID);
+            if(empty($pageInfo) || $pageInfo['status'] <> '1'){
+                $this->error('无条目不存在');
+            }
+            if($pageInfo['type'] == '5'){
+                $this->error('无条目为目录');
+            }
+            //项目详情
+            $projectInfo = $projectService->info($pageInfo['project_id']);
+            //检查用户的项目权限
+            $auth = $projectService->checkUserProjectAuth($projectInfo,session('user_id'));
+            if($auth['view'] == 0){
+                $this->error('无权限查看本项目');
+            }
+
+            //db基本信息
+            $dbInfo = $pageService->getDbDoc($pageInfo['project_id'],$pageID);
+            //输出
+            return view('/page/db',
+                [
+                    'projectInfo'=>$projectInfo,
+                    'page_info'=>$pageInfo,
+                    'db_info'=>$dbInfo,
                     'page_id'=>$pageID,
                 ]
             );

@@ -8,6 +8,7 @@
 
 namespace app\index\service;
 use think\Model;
+use think\Request;
 
 class Page extends Model
 {
@@ -143,6 +144,43 @@ class Page extends Model
      */
     public function editApiRequest($id,$requestArray){
         return db('project_api_request')->where(['id'=>$id])->update($requestArray);
+    }
+
+    /**
+     * 获取数据字典
+     * @param $projectID
+     * @param $pageID
+     * @return mixed
+     */
+    public function getDbDoc($projectID,$pageID){
+        $userService = new \app\index\service\User();
+        //基本信息
+        $db['info'] = db('project_db')
+            ->where(
+                [
+                    'project_id' => $projectID,
+                    'page_id' => $pageID,
+                ]
+            )
+            ->find();
+        //作者
+        $db['author'] = $userService->info($db['info']['create_user_id']);
+        return $db;
+    }
+
+    /**
+     * @param $dbArray
+     * @return int|string
+     */
+    public function addDbInfo($dbArray){
+        $id = $dbArray['db_id'];
+        unset($dbArray['db_id']);
+        if(!empty($id)){
+            db('project_db')->where(['id'=>$id])->update($dbArray);
+            return $id;
+        }else{
+            return db('project_db')->insertGetId($dbArray);
+        }
     }
 
 

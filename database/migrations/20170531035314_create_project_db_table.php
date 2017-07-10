@@ -50,7 +50,7 @@ class CreateProjectDbTable extends Migrator
                     'comment' => '字典名称',
                 )
             )
-            ->addColumn('remark', 'string',
+            ->addColumn('description', 'string',
                 array(
                     'length' => 255,
                     'comment' => '备注、说明',
@@ -59,6 +59,12 @@ class CreateProjectDbTable extends Migrator
             ->addColumn('content', 'text',
                 array(
                     'comment' => '内容（json格式）',
+                )
+            )
+            ->addColumn('create_user_id', 'integer',
+                array(
+                    'length' => MysqlAdapter::INT_REGULAR,
+                    'comment' => '创建者id',
                 )
             )
             ->addColumn('created_at', 'timestamp',array('default'=>'CURRENT_TIMESTAMP'))
