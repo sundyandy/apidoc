@@ -11,6 +11,9 @@ use think\Model;
 
 class Menu extends Model
 {
+    const TYPE_API = 1;
+    const TYPE_ARTICLE = 4;
+
     /**
      * 菜单列表
      * @param $projectID

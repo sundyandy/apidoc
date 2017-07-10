@@ -75,12 +75,28 @@ class Project extends Base
                 ]
             );
         }else{
+            $menuService = new \app\index\service\Menu();
+            $pageService = new \app\index\service\Page();
+            $pageInfo = $menuService->info($pageID);
+            if($pageInfo['type'] == $menuService::TYPE_API){
+                //api基本信息
+                $apiInfo = $pageService->getApiDoc($projectID,$pageID);
+                //输出
+                return view('/page/api_show',
+                    [
+                        'project_info'=>$projectInfo,
+                        'page_info'=>$pageInfo,
+                        'api_info'=>$apiInfo,
+                        'page_id'=>$pageID,
+                        'menu_list'=>$projectMenu,
+                        'auth' => $auth,
+                    ]
+                );
+            }
+            if($pageInfo['type'] == $menuService::TYPE_ARTICLE){
 
+            }
         }
-
-
-        //输出
-
     }
 
 
