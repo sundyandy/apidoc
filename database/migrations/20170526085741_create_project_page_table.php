@@ -38,10 +38,16 @@ class CreateProjectPageTable extends Migrator
                     'comment' => '项目id，关联project.id',
                 )
             )
-            ->addColumn('class_id', 'integer',
+            ->addColumn('pre_id', 'integer',
                 array(
                     'length' => MysqlAdapter::INT_REGULAR,
-                    'comment' => '分类id，关联project_page_class.id',
+                    'comment' => '上级id',
+                )
+            )
+            ->addColumn('path', 'string',
+                array(
+                    'length' => 255,
+                    'comment' => 'id路径',
                 )
             )
             ->addColumn('title', 'string',
@@ -61,7 +67,14 @@ class CreateProjectPageTable extends Migrator
                 array(
                     'length' => MysqlAdapter::INT_TINY,
                     'default' => 0,
-                    'comment' => '类型 1api 2数据字典 3错误码 4文章',
+                    'comment' => '类型 1api 2数据字典 3错误码 4文章 5目录',
+                )
+            )
+            ->addColumn('level', 'integer',
+                array(
+                    'length' => MysqlAdapter::INT_TINY,
+                    'default' => 0,
+                    'comment' => '等级',
                 )
             )
             ->addColumn('create_user_id', 'integer',

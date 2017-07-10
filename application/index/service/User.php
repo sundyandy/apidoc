@@ -30,4 +30,14 @@ class User extends Model
             ->where(['username'=>$username])
             ->find();
     }
+
+    /**
+     * @param $userID
+     * @return array|false|\PDOStatement|string|Model
+     */
+    public function info($userID){
+        return db('user')
+            ->where(['id'=>$userID])
+            ->find();
+    }
 }
