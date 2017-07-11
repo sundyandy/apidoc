@@ -1,0 +1,61 @@
+<div class="tree well">
+    <ul>
+        {volist name="menu_list" id="vo"}
+        <li>
+            {neq name="vo.type" value="5"}
+            <a href="{:url('project/info',['id'=>$project_info.id,'page_id'=>$vo.id])}">{$vo.title}</a>
+            {else/}
+            {$vo.title}
+            {/neq}
+
+            {eq name="vo.has_child" value="1"}
+            <ul>
+                {volist name="vo.child" id="child"}
+                <li>
+                    {neq name="child.type" value="5"}
+                    <a href="{:url('project/info',['id'=>$project_info.id,'page_id'=>$child.id])}">{$child.title}</a>
+                    {else/}
+                    {$child.title}
+                    {/neq}
+                    <!--level3-->
+                    {eq name="child.has_child" value="1"}
+                    <ul>
+                        {volist name="child.child" id="childchild"}
+                        <li>
+                            {neq name="childchild.type" value="5"}
+                            <a href="{:url('project/info',['id'=>$project_info.id,'page_id'=>$childchild.id])}">{$childchild.title}</a>
+                            {else/}
+                            {$childchild.title}
+                            {/neq}
+                        </li>
+                        {/volist}
+                    </ul>
+                </li>
+                {else/}
+                </li>
+                {/eq}
+                <!--level3-->
+
+                </li>
+                {/volist}
+            </ul>
+        </li>
+        {else/}
+        </li>
+        {/eq}
+        {/volist}
+        <hr>
+        <li>
+            <a href="{:url('/project/info',['id'=>$project_info.id])}">文档历史</a>
+        </li>
+        <li>
+            <a href="{:url('/project/index')}">返回首页</a>
+        </li>
+        {eq name="auth.edit" value="1"}
+            <li>
+                <a href="{:url('/project/menu',['project_id'=>$project_info.id])}">*管理菜单*</a>
+            </li>
+        {/eq}
+
+    </ul>
+</div>

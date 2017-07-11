@@ -68,7 +68,7 @@ class Project extends Base
             $getDefault = $projectService->getProjectOperateLog($projectID);
             return view('/page/default',
                 [
-                    'projectInfo'=>$projectInfo,
+                    'project_info'=>$projectInfo,
                     'menu_list'=>$projectMenu,
                     'auth' => $auth,
                     'content' => $getDefault
@@ -94,7 +94,19 @@ class Project extends Base
                 );
             }
             if($pageInfo['type'] == $menuService::TYPE_ARTICLE){
-
+                //基本信息
+                $articleInfo = $pageService->getArticle($projectID,$pageID);
+                //输出
+                return view('/page/article_show',
+                    [
+                        'project_info'=>$projectInfo,
+                        'page_info'=>$pageInfo,
+                        'article_info'=>$articleInfo,
+                        'page_id'=>$pageID,
+                        'menu_list'=>$projectMenu,
+                        'auth' => $auth,
+                    ]
+                );
             }
         }
     }
