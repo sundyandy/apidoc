@@ -91,7 +91,7 @@
                             <td>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="is_must[{$request.id}]" id="is_must_{$request.id}" value="1"
+                                        <input type="radio" name="is_must[{$request.id}]" id="is_must_{$request.id}1" value="1"
                                         <?php
                                             if($request['is_must']=='1'){
                                                 echo 'checked';
@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="is_must[{$request.id}]" id="is_must_{$request.id}" value="0"
+                                        <input type="radio" name="is_must[{$request.id}]" id="is_must_{$request.id}0" value="0"
                                         <?php
                                             if($request['is_must']=='0'){
                                                 echo 'checked';
@@ -118,7 +118,7 @@
                             <td>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="type[{$request.id}]" id="type_{$request.id}" value="string"
+                                        <input type="radio" name="type[{$request.id}]" id="type_{$request.id}1" value="string"
                                         <?php
                                             if($request['type']=='string'){
                                                 echo 'checked';
@@ -130,7 +130,7 @@
                                 </div>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="type[{$request.id}]" id="type_{$request.id}" value="int"
+                                        <input type="radio" name="type[{$request.id}]" id="type_{$request.id}0" value="int"
                                         <?php
                                             if($request['type']=='int'){
                                                 echo 'checked';
@@ -156,13 +156,13 @@
                         <td>
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="new_is_must[]" value="1">
+                                    <input type="radio" name="new_is_must[0]" value="1">
                                     必填
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="new_is_must[]"  value="0">
+                                    <input type="radio" name="new_is_must[0]"  value="0">
                                     非必填
                                 </label>
                             </div>
@@ -171,13 +171,13 @@
                         <td>
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="new_type[]"  value="string">
+                                    <input type="radio" name="new_type[0]"  value="string">
                                     string
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="new_type[]"  value="int">
+                                    <input type="radio" name="new_type[0]"  value="int">
                                     int
                                 </label>
                             </div>
@@ -205,7 +205,8 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $("button[name='add']").click(function(){
-            $('<tr><td><input type="text" class="form-control"  name="new_param[]" placeholder="字段名称" value=""></td><td><div class="radio"><label><input type="radio" name="new_is_must[]"  value="1">必填</label></div><div class="radio"><label><input type="radio" name="new_is_must[]"  value="0">非必填</label></div></td><td><div class="radio"><label><input type="radio" name="new_type[]"  value="string">string</label></div><div class="radio"><label><input type="radio" name="new_type[]"  value="int">int</label></div></td><td><input type="text" class="form-control"  name="new_remark[]" placeholder="备注" value=""></td></tr> ').insertAfter("tr[id='org']");
+            var count = $("input[name='new_param[]']").length;
+            $('<tr><td><input type="text" class="form-control"  name="new_param[]" placeholder="字段名称" value=""></td><td><div class="radio"><label><input type="radio" name="new_is_must['+count+']"  value="1">必填</label></div><div class="radio"><label><input type="radio" name="new_is_must['+count+']"  value="0">非必填</label></div></td><td><div class="radio"><label><input type="radio" name="new_type['+count+']"  value="string">string</label></div><div class="radio"><label><input type="radio" name="new_type['+count+']"  value="int">int</label></div></td><td><input type="text" class="form-control"  name="new_remark[]" placeholder="备注" value=""></td></tr> ').insertAfter("tr[id='org']");
         });
     });
 </script>
