@@ -22,7 +22,11 @@ class Project extends Base
     public function index(Request $request){
         $projectService = new \app\index\service\Project();
         $lists = $projectService->my();
-        return view('/project/lists',['lists'=>$lists]);
+        $myJoin = $projectService->myJoin();
+        return view('/project/lists',[
+            'lists'=>$lists,
+            'join_lists'=>$myJoin,
+        ]);
     }
 
     /**

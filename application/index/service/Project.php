@@ -204,4 +204,34 @@ class Project extends Model
         }
         return true;
     }
+
+
+    /**
+     * 我参与的项目
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function myJoin(){
+        $myJoinProjects = db('project_user')
+            ->where(
+                [
+                    'user_id'=> session('user_id'),
+                    'status' => 1
+                ]
+            )
+            ->select();
+        if(!empty($myJoinProjects)){
+            foreach($myJoinProjects as $line){
+                $projectIDs[] = $line['project_id'];
+            }
+            $projectIDs = array_unique($projectIDs);
+            $projectIDs = implode(',',$projectIDs);
+            $map['id'] = ['exp','IN ('.$projectIDs.') '];
+            $map['status'] = 1;
+            return db('project')
+                ->where($map)
+                ->select();
+        }else{
+            return [];
+        }
+    }
 }

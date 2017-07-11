@@ -5,6 +5,7 @@
 
 {block name="content"}
 <div class="col-md-12">
+    <h3>我创建的</h3>
     <div class="project_list">
         {volist name="lists" id="vo"}
         <a href="{:url('/project/info','id='.$vo.id)}">
@@ -22,4 +23,19 @@
         </a>
     </div>
 </div>
+
+<div class="col-md-12">
+    <h3>我参与的</h3>
+    <div class="project_list">
+        {volist name="join_lists" id="vo"}
+        <a href="{:url('/project/info','id='.$vo.id)}">
+            <div class="project_box">
+                <p class="title">{$vo.project_name}</p>
+                <p class="sub">{$vo.description}</p>
+            </div>
+        </a>
+        {/volist}
+    </div>
+</div>
+
 {/block}
