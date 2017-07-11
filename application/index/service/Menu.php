@@ -65,6 +65,7 @@ class Menu extends Model
             'title' => $menuArray['title'],
             'type' => $menuArray['type'],
             'sort' => $menuArray['sort'],
+            'path' => '',
             'create_user_id' => session('user_id'),
             'status' => 1,
         ];
