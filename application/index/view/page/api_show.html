@@ -4,6 +4,17 @@
 {block name="sub_title"}{$project_info.project_name} <small>{$project_info.description}</small>{/block}
 
 {block name="content"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/markdown/css/editormd.preview.min.css">
+
+<script src="__STATIC__/markdown/lib/marked.min.js"></script>
+<script src="__STATIC__/markdown/lib/prettify.min.js"></script>
+<script src="__STATIC__/markdown/lib/raphael.min.js"></script>
+<script src="__STATIC__/markdown/lib/underscore.min.js"></script>
+<script src="__STATIC__/markdown/lib/sequence-diagram.min.js"></script>
+<script src="__STATIC__/markdown/lib/flowchart.min.js"></script>
+<script src="__STATIC__/markdown/lib/jquery.flowchart.min.js"></script>
+<script src="__STATIC__/markdown/editormd.min.js"></script>
+
 <div class="row">
     <div class="col-md-3">
         {include file="base/nav" /}
@@ -23,6 +34,13 @@
         <li>{$api_info.info.remark|default=''}</li>
         <p class="bg-info h3title">返回json示例:</p>
         <li>{$api_info.info.response|default=''}</li>
+        <div id="editormd-view">
+            <textarea id="append-test" style="display:none;">
+```json
+{$api_info.info.response|default=''}
+```
+            </textarea>
+        </div>
         <p class="bg-info h3title">入参:</p>
 
         <table class="table table-bordered table-striped">
@@ -58,6 +76,22 @@
             }
             e.stopPropagation();
         });
+
+        var testEditormdView;
+        $.get("test.md", function(markdown) {
+            testEditormdView = editormd.markdownToHTML("editormd-view", {
+                markdown        : markdown ,//+ "\r\n" + $("#append-test").text(),
+                htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                tocm            : true,    // Using [TOCM]
+                emoji           : true,
+                taskList        : true,
+                tex             : true,  // 默认不解析
+                flowChart       : true,  // 默认不解析
+                sequenceDiagram : true,  // 默认不解析
+            });
+        });
     });
 </script>
+
+
 {/block}

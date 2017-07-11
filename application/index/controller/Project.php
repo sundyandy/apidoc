@@ -144,7 +144,7 @@ class Project extends Base
             //输出
             return view('/project/menu',
                 [
-                    'projectInfo'=>$projectInfo,
+                    'project_info'=>$projectInfo,
                     'menu_list'=>$projectMenu,
                     'auth' => $auth
                 ]
