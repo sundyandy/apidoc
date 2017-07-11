@@ -1,0 +1,41 @@
+{extend name="base/base" /}
+
+{block name="title"}我的项目{/block}
+{block name="sub_title"}我的项目{/block}
+
+{block name="content"}
+<div class="col-md-12">
+    <h3>我创建的</h3>
+    <div class="project_list">
+        {volist name="lists" id="vo"}
+        <a href="{:url('/project/info','id='.$vo.id)}">
+            <div class="project_box">
+                <p class="title">{$vo.project_name}</p>
+                <p class="sub">{$vo.description}</p>
+            </div>
+        </a>
+        {/volist}
+
+        <a href="{:url('/project/add')}">
+            <div class="project_box">
+                <div class="add"><i class="glyphicon glyphicon-plus"></i></div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <h3>我参与的</h3>
+    <div class="project_list">
+        {volist name="join_lists" id="vo"}
+        <a href="{:url('/project/info','id='.$vo.id)}">
+            <div class="project_box">
+                <p class="title">{$vo.project_name}</p>
+                <p class="sub">{$vo.description}</p>
+            </div>
+        </a>
+        {/volist}
+    </div>
+</div>
+
+{/block}

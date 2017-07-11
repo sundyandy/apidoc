@@ -1,0 +1,235 @@
+{extend name="base/base" /}
+
+{block name="title"}菜单管理{/block}
+{block name="sub_title"}{$project_info.project_name} <small>{$project_info.description} <a href="{:url('/project/info',['id'=>$project_info.id])}">[返回]</a></small> {/block}
+
+{block name="content"}
+<div class="row">
+    <div class="col-md-3">
+        {include file="base/nav" /}
+    </div>
+    <div class="col-md-8">
+        <div class="tree well">
+            <ul>
+                {volist name="menu_list" id="vo"}
+                <li>
+                    {$vo.title}
+                    {eq name="vo.type" value="5"}
+                        <a href="#" data-toggle="modal" data-target="#addLevel1" data-preid="{$vo.id}" data-prename="{$vo.title}" data-type="{$vo.type}" onclick="getInfo(this)" data-level="{$vo.level}">
+                        <button type="button" class="btn btn-primary btn-sm margin10">添加下级</button>
+                        </a>
+                        {else}
+                        <a href="{:url('/project/editPage/',['type'=>$vo.type,'id'=>$vo.id])}">
+                        <button type="button" class="btn btn-success btn-sm margin10">编辑内容</button>
+                        </a>
+                    {/eq}
+
+                    <a href="#" data-toggle="modal" data-target="#editLevel" data-id="{$vo.id}" data-title="{$vo.title}" data-type="{$vo.type}" onclick="editInfo(this)" data-sort="{$vo.sort}">
+                    <button type="button" class="btn btn-info btn-sm margin10">修改</button>
+                    </a>
+                    {eq name="vo.has_child" value="1"}
+                        <ul>
+                        {volist name="vo.child" id="child"}
+                            <li>
+                                <div>
+                                    {$child.title}
+                                    {eq name="child.type" value="5"}
+                                    <a href="#" data-toggle="modal" data-target="#addLevel1" data-preid="{$child.id}" data-prename="{$child.title}" data-type="{$child.type}" onclick="getInfo(this)" data-level="{$child.level}">
+                                    <button type="button" class="btn btn-primary btn-sm margin10">添加下级</button>
+                                        {else}
+                                    <a href="{:url('/project/editPage/',['type'=>$child.type,'id'=>$child.id])}">
+                                        <button type="button" class="btn btn-success btn-sm margin10">编辑内容</button>
+                                    </a>
+                                    {/eq}
+                                </a>
+                                <a href="#" data-toggle="modal" data-target="#editLevel" data-id="{$child.id}" data-title="{$child.title}" data-type="{$child.type}" onclick="editInfo(this)" data-sort="{$child.sort}">
+                                    <button type="button" class="btn btn-info btn-sm margin10">修改</button>
+                                </a>
+                                </div>
+                                <!--level3-->
+                                {eq name="child.has_child" value="1"}
+                                <ul>
+                                    {volist name="child.child" id="childchild"}
+                                    <li>
+                                     {$childchild.title}
+                                        <a href="#" data-toggle="modal" data-target="#editLevel" data-id="{$childchild.id}" data-title="{$childchild.title}" data-type="{$childchild.type}" onclick="editInfo(this)" data-sort="{$childchild.sort}">
+                                            <button type="button" class="btn btn-info btn-sm margin10">修改</button>
+                                        </a>
+                                        <a href="{:url('/project/menuDel',['id'=>$childchild.id])}" onclick="return confirm('确定删除 ***{$childchild.title}*** 吗？')">
+                                            <button type="button" class="btn btn-danger btn-sm margin10">删除</button>
+                                        </a>
+                                        {neq name="childchild.type" value="5"}
+                                        <a href="{:url('/project/editPage/',['type'=>$childchild.type,'id'=>$childchild.id])}">
+                                            <button type="button" class="btn btn-success btn-sm margin10">编辑内容</button>
+                                        </a>
+                                        {/neq}
+                                    </li>
+                                    {/volist}
+                                </ul>
+                                </li>
+                                {else/}
+                                </li>
+                            <a href="{:url('/project/menuDel',['id'=>$child.id])}"  onclick="return confirm('确定删除 ***{$child.title}*** 吗？')"><button type="button" class="btn btn-danger btn-sm">删除</button></a>
+                                {/eq}
+                                <!--level3-->
+
+                            </li>
+                        {/volist}
+                        </ul>
+                        </li>
+                    {else/}
+                    <a href="{:url('/project/menuDel',['id'=>$vo.id])}"  onclick="return confirm('确定删除 ***{$vo.title}*** 吗？')"><button type="button" class="btn btn-danger btn-sm">删除</button></a>
+                        </li>
+                    {/eq}
+                {/volist}
+
+                <li class="level1">
+                    <a href="#" data-toggle="modal" data-target="#addLevel1" data-preid="0" data-prename="无" onclick="getInfo(this)">
+                        <button type="button" class="btn btn-primary btn-sm">添加顶级元素</button>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!--添加菜单-->
+<div class="modal fade" id="addLevel1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <form method="post">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">添加页面</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="pre_name">上级页面</label>
+                        <input type="text" class="form-control" id="pre_name" name="pre_name" value="" disabled>
+                        <input type="hidden" class="form-control" id="pre_id" name="pre_id" value="">
+                        <input type="hidden" class="form-control" id="project_id" name="project_id" value="{$project_info.id}">
+                    </div>
+                    <div class="form-group">
+                        <label for="title">页面名称</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">排序，数字越小排越前</label>
+                        <input type="text" class="form-control" id="sort" name="sort" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="type1">页面类型</label>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="type" id="type1" value="1" checked>api
+                            </label>
+                        </div>
+                        <!--<div class="radio">-->
+                            <!--<label>-->
+                                <!--<input type="radio" name="type" id="type2" value="2">数据字典-->
+                            <!--</label>-->
+                        <!--</div>-->
+                        <!--<div class="radio">-->
+                            <!--<label>-->
+                                <!--<input type="radio" name="type" id="type3" value="3">错误码-->
+                            <!--</label>-->
+                        <!--</div>-->
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="type" id="type4" value="4">文章（普通文章、数据字典、错误码等）
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="type" id="type5" value="5">目录
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="add_menu">确定</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--修改菜单-->
+<div class="modal fade" id="editLevel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <form method="post" action="{:url('/project/menuEdit')}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">编辑页面</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="title">页面名称</label>
+                        <input type="text" class="form-control" id="new_title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">排序，数字越小排越前</label>
+                        <input type="text" class="form-control" id="new_sort" name="sort" value="0">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="id" id="edit_id" value="">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="add_menu">确定</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(function () {
+        $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+        $('.tree li.parent_li > span').on('click', function (e) {
+            var children = $(this).parent('li.parent_li').find(' > ul > li');
+            if (children.is(":visible")) {
+                children.hide('fast');
+                $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+            } else {
+                children.show('fast');
+                $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+            }
+            e.stopPropagation();
+        });
+    });
+
+    //调出模态框时获取数据并赋值
+    function getInfo(obj) {
+        var pre_id = $(obj).data("preid");
+        var pre_name = $(obj).data("prename");
+        var type = $(obj).data("type");
+        var level = $(obj).data("level");
+
+        //向模态框中传值
+        $('#pre_name').val(pre_name);
+        $('#pre_id').val(pre_id);
+        if(level>1){
+            $("input[id='type5']").attr("disabled","disabled");
+        }else{
+            $("input[id='type5']").attr("disabled",false);
+        }
+    }
+
+    //调出模态框时获取数据并赋值
+    function editInfo(obj) {
+        var id = $(obj).data("id");
+        var title = $(obj).data("title");
+        var sort = $(obj).data("sort");
+        console.log(id)
+        console.log(title)
+        console.log(sort)
+        //向模态框中传值
+        $('#new_title').val(title);
+        $('#new_sort').val(sort);
+        $('#edit_id').val(id);
+    }
+</script>
+{/block}

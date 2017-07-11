@@ -1,0 +1,212 @@
+{extend name="base/base" /}
+
+{block name="title"}管理文档{/block}
+{block name="sub_title"}api管理&nbsp;&nbsp;<small><a href="{:url('/project/menu',['project_id'=>$project_info.id])}">返回</a></small>{/block}
+
+{block name="content"}
+<div class="col-md-12">
+
+    <form class="form-horizontal" method="post">
+        <div class="form-group">
+            <label for="title" class="col-sm-2 control-label">API 名称</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="title" name="title" placeholder="API 名称" value="{$page_info.title|default=''}" disabled>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="descrition" class="col-sm-2 control-label">API 描述</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="descrition" name="descrition" placeholder="API 描述">{$api_info.info.descrition|default=''}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="title" class="col-sm-2 control-label">API URI(如 user/login )</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="uri" name="uri" placeholder="API URI" value="{$api_info.info.uri|default=''}" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Method</label>
+            <div class="col-sm-10">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="method" id="method1" value="post"
+                        <?php
+                            if(isset($api_info['info']['method']) && $api_info['info']['method']=='post'){
+                                echo 'checked';
+                            }
+                        ?>
+                        >
+                        POST
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="method" id="method2" value="get"
+                        <?php
+                            if(isset($api_info['info']['method']) && $api_info['info']['method']=='get'){
+                                echo 'checked';
+                            }
+                        ?>
+                        >
+                        GET
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="remark" class="col-sm-2 control-label">备注</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="remark" name="api_remark" placeholder="备注">{$api_info.info.remark|default=''}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="remark" class="col-sm-2 control-label">返回json示例</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="response" name="response" placeholder="返回json示例" rows="10">{$api_info.info.response|default=''}</textarea>
+            </div>
+        </div>
+
+        <hr>
+        <div class="form-group">
+            <label for="remark" class="col-sm-2 control-label">入参
+            <p><button name="add" type="button" class="btn btn-info">添加字段</button></p>
+            </label>
+            <div class="col-sm-10">
+                <table class="table table-bordered">
+                    <tr>
+                        <th width="25%">字段名称</th>
+                        <th width="25%">是否必填</th>
+                        <th width="25%">类型</th>
+                        <th width="25%">备注</th>
+                    </tr>
+                    {volist name="api_info.request" id="request"}
+                        <tr>
+                            <td>
+                                <input type="text" class="form-control" id="param_{$request.id}" name="param[{$request.id}]" placeholder="字段名称" value="{$request.param}">
+                            </td>
+
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_must[{$request.id}]" id="is_must_{$request.id}" value="1"
+                                        <?php
+                                            if($request['is_must']=='1'){
+                                                echo 'checked';
+                                            }
+                                        ?>
+                                        >
+                                        必填
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="is_must[{$request.id}]" id="is_must_{$request.id}" value="0"
+                                        <?php
+                                            if($request['is_must']=='0'){
+                                                echo 'checked';
+                                            }
+                                        ?>
+                                        >
+                                        非必填
+                                    </label>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="type[{$request.id}]" id="type_{$request.id}" value="string"
+                                        <?php
+                                            if($request['type']=='string'){
+                                                echo 'checked';
+                                            }
+                                        ?>
+                                        >
+                                        string
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="type[{$request.id}]" id="type_{$request.id}" value="int"
+                                        <?php
+                                            if($request['type']=='int'){
+                                                echo 'checked';
+                                            }
+                                        ?>
+                                        >
+                                        int
+                                    </label>
+                                </div>
+                            </td>
+
+                            <td>
+                                <input type="text" class="form-control" id="remark_{$request.id}" name="remark[{$request.id}]" placeholder="备注" value="{$request.remark}">
+                            </td>
+                        </tr>
+                    {/volist}
+
+                    <tr id="org">
+                        <td>
+                            <input type="text" class="form-control"  name="new_param[]" placeholder="字段名称" value="">
+                        </td>
+
+                        <td>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="new_is_must[]" value="1">
+                                    必填
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="new_is_must[]"  value="0">
+                                    非必填
+                                </label>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="new_type[]"  value="string">
+                                    string
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="new_type[]"  value="int">
+                                    int
+                                </label>
+                            </div>
+                        </td>
+
+                        <td>
+                            <input type="text" class="form-control"  name="new_remark[]" placeholder="备注" value="">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="hidden" name="project_id" value="{$project_info.id}">
+                <input type="hidden" name="page_id" value="{$page_id}">
+                <input type="hidden" name="api_id" value="{$api_info.info.id}">
+                <button type="submit" class="btn btn-success btn-block btn-lg">编辑文档</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("button[name='add']").click(function(){
+            $('<tr><td><input type="text" class="form-control"  name="new_param[]" placeholder="字段名称" value=""></td><td><div class="radio"><label><input type="radio" name="new_is_must[]"  value="1">必填</label></div><div class="radio"><label><input type="radio" name="new_is_must[]"  value="0">非必填</label></div></td><td><div class="radio"><label><input type="radio" name="new_type[]"  value="string">string</label></div><div class="radio"><label><input type="radio" name="new_type[]"  value="int">int</label></div></td><td><input type="text" class="form-control"  name="new_remark[]" placeholder="备注" value=""></td></tr> ').insertAfter("tr[id='org']");
+        });
+    });
+</script>
+{/block}

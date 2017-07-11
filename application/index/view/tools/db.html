@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>获取数据库信息</title>
+    <link href="__STATIC__/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__STATIC__/css/common.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="col-md-12">
+            <div class="row-fluid">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-4">
+                    <h1 class="text-center">输入目标数据库信息</h1>
+                    <form method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="hosts" class="col-sm-2 control-label">主机</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="hosts" name="hosts" placeholder="主机" value="{$hosts|default='localhost'}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="port" class="col-sm-2 control-label">端口</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="port" name="port" placeholder="主机" value="{$port|default='3306'}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label">账号</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="username" name="username" placeholder="账号" value="{$username|default='root'}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-sm-2 control-label">密码</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="password" name="password" placeholder="密码" value="{$password|default='root'}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dbname" class="col-sm-2 control-label">库名</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="dbname" name="dbname" placeholder="数据库名" value="{$dbname|default=''}" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block btn-lg">获取信息</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <p>
+                <br><br>
+            <textarea class="col-sm-12" rows="15">{$content|default=''}</textarea>
+            </p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

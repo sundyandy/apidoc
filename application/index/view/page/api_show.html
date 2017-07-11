@@ -1,0 +1,97 @@
+{extend name="base/base" /}
+
+{block name="title"}项目明细{/block}
+{block name="sub_title"}{$project_info.project_name} <small>{$project_info.description}</small>{/block}
+
+{block name="content"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/markdown/css/editormd.preview.min.css">
+
+<script src="__STATIC__/markdown/lib/marked.min.js"></script>
+<script src="__STATIC__/markdown/lib/prettify.min.js"></script>
+<script src="__STATIC__/markdown/lib/raphael.min.js"></script>
+<script src="__STATIC__/markdown/lib/underscore.min.js"></script>
+<script src="__STATIC__/markdown/lib/sequence-diagram.min.js"></script>
+<script src="__STATIC__/markdown/lib/flowchart.min.js"></script>
+<script src="__STATIC__/markdown/lib/jquery.flowchart.min.js"></script>
+<script src="__STATIC__/markdown/editormd.min.js"></script>
+
+<div class="row">
+    <div class="col-md-3">
+        {include file="base/nav" /}
+    </div>
+    <div class="col-md-8">
+        <h1>{$page_info.title|default=''} <small>创建人：{$api_info.author.realname}</small></h1>
+
+        <blockquote>
+            <p>{$api_info.info.descrition|default=''}</p>
+        </blockquote>
+        <hr>
+        <p class="bg-info h3title">API URI:</p>
+        <li>{$api_info.info.uri|default=''}</li>
+        <p class="bg-info h3title">Method:</p>
+        <li>{$api_info.info.method|default=''}</li>
+        <p class="bg-info h3title">备注:</p>
+        <li>{$api_info.info.remark|default=''}</li>
+        <p class="bg-info h3title">返回json示例:</p>
+        <li>{$api_info.info.response|default=''}</li>
+        <div id="editormd-view">
+            <textarea id="append-test" style="display:none;">
+```json
+{$api_info.info.response|default=''}
+```
+            </textarea>
+        </div>
+        <p class="bg-info h3title">入参:</p>
+
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th width="25%">字段名称</th>
+                <th width="25%">是否必填</th>
+                <th width="25%">类型</th>
+                <th width="25%">备注</th>
+            </tr>
+            {volist name="api_info.request" id="request"}
+            <tr>
+                <td>{$request.param}</td>
+                <td>{eq name="request.is_must" value="1"} <p class="text-primary">必填</p> {else/}  {/eq}</td>
+                <td>{$request.type}</td>
+                <td>{$request.remark}</td>
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+        $('.tree li.parent_li > span').on('click', function (e) {
+            var children = $(this).parent('li.parent_li').find(' > ul > li');
+            if (children.is(":visible")) {
+                children.hide('fast');
+                $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+            } else {
+                children.show('fast');
+                $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+            }
+            e.stopPropagation();
+        });
+
+        var testEditormdView;
+        $.get("test.md", function(markdown) {
+            testEditormdView = editormd.markdownToHTML("editormd-view", {
+                markdown        : markdown ,//+ "\r\n" + $("#append-test").text(),
+                htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                tocm            : true,    // Using [TOCM]
+                emoji           : true,
+                taskList        : true,
+                tex             : true,  // 默认不解析
+                flowChart       : true,  // 默认不解析
+                sequenceDiagram : true,  // 默认不解析
+            });
+        });
+    });
+</script>
+
+
+{/block}

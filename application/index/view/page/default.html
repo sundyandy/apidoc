@@ -1,0 +1,60 @@
+{extend name="base/base" /}
+
+{block name="title"}项目明细{/block}
+{block name="sub_title"}{$project_info.project_name} <small>{$project_info.description}</small>{/block}
+
+{block name="content"}
+<div class="row">
+    <div class="col-md-3">
+        {include file="base/nav" /}
+    </div>
+    <div class="col-md-8">
+        {eq name="content" value=""}
+            <h1>暂无历史记录</h1>
+        {else/}
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>操作日期</th>
+                    <th>操作人</th>
+                    <th>操作类型</th>
+                    <th>主体</th>
+                </tr>
+                {volist name="content" id="vo"}
+                    <tr>
+                        <td>{$vo.operator_date}</td>
+                        <td>{$vo.realname}</td>
+                        <td>{$vo.type}</td>
+                        <td>
+                            {eq name="vo.type" value="1"}
+                                <span class="text-info">【API】</span>
+                            {/eq}
+                            {eq name="vo.type" value="4"}
+                                【文章】
+                            {/eq}
+                            <a href="{:url('/project/info',['id'=>$project_info.id,'page_id'=>$vo.page_id])}">{$vo.title}</a>
+                        </td>
+                    </tr>
+                {/volist}
+            </table>
+
+        {/eq}
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+        $('.tree li.parent_li > span').on('click', function (e) {
+            var children = $(this).parent('li.parent_li').find(' > ul > li');
+            if (children.is(":visible")) {
+                children.hide('fast');
+                $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+            } else {
+                children.show('fast');
+                $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+            }
+            e.stopPropagation();
+        });
+    });
+</script>
+{/block}
