@@ -137,6 +137,11 @@ class Project extends Model
         return true;
     }
 
+    /**
+     * 项目操作记录
+     * @param $projectID
+     * @return false|\PDOStatement|string|\think\Collection
+     */
     public function getProjectOperateLog($projectID){
         return db('project_operate_log')
             ->join('project_page','project_page.id = project_operate_log.page_id')
@@ -145,5 +150,58 @@ class Project extends Model
             ->where(['project_operate_log.project_id' => $projectID])
             ->order('id desc')
             ->select();
+    }
+
+    /**
+     * 获取项目成员表
+     * @param $projectID
+     * @param int $type
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function getProjectUser($projectID,$type=1){
+        $map['project_id'] = $projectID;
+        if($type){
+            $map['status'] = $type;
+        }
+        return db('project_user')->where($map)->select();
+    }
+
+
+    public function setProjectUser($projectID,$userID,$auth){
+        $check = db('project_user')
+            ->where(
+                [
+                    'project_id' => $projectID,
+                    'user_id' => $userID,
+                    'status' => 1
+                ]
+            )
+            ->find();
+        if(!empty($check)){
+            if(!empty($auth)){
+                $where = [
+                    'project_id' => $projectID,
+                    'user_id' => $userID,
+                ];
+                db('project_user')->where($where)->update(['type' => $auth]);
+            }else{
+                $where = [
+                    'project_id' => $projectID,
+                    'user_id' => $userID,
+                ];
+                db('project_user')->where($where)->update(['status' => 0,'deleted_at' => date('Y-m-d H:i:s')]);
+            }
+        }else{
+            if(!empty($auth)){
+                $add = [
+                    'project_id' => $projectID,
+                    'user_id' => $userID,
+                    'type' => $auth,
+                    'status' => 1
+                ];
+                db('project_user')->insert($add);
+            }
+        }
+        return true;
     }
 }

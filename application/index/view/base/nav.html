@@ -56,6 +56,10 @@
                 <a href="{:url('/project/menu',['project_id'=>$project_info.id])}">*管理菜单*</a>
             </li>
         {/eq}
-
+        {eq name="project_info.create_user_id" value="$Think.session.user_id"}
+        <li>
+            <a href="{:url('/project/user',['id'=>$project_info.id])}">*管理项目成员*</a>
+        </li>
+        {/eq}
     </ul>
 </div>

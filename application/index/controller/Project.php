@@ -368,4 +368,52 @@ class Project extends Base
         }
 
     }
+
+    public function user(Request $request){
+        $projectService = new \app\index\service\Project();
+        $menuService = new \app\index\service\Menu();
+        $pageService = new \app\index\service\Page();
+        if(request()->isPost()){
+            $type = $_POST['type'];
+            $projectID = input('project_id');
+            if(!empty($type)){
+                foreach ($type as $key=>$value){
+                    $projectService->setProjectUser($projectID,$key,$value);
+                }
+            }
+            $this->success('编辑成功');
+        }else{
+            $projectID = Request::instance()->param('id');
+            //项目详情
+            $projectInfo = $projectService->info($projectID);
+            //检查用户的项目权限
+            $auth = $projectService->checkUserProjectAuth($projectInfo,session('user_id'));
+            if($auth['edit'] == 0){
+                $this->error('无权限编辑本项目');
+            }
+            //左侧菜单
+            $projectMenu = $menuService->lists($projectID);
+            $userService = new \app\index\service\User();
+            $userLists = $userService->lists();
+            $projectUserListsTmp = $projectService->getProjectUser($projectID);
+            if(!empty($projectUserListsTmp)){
+                foreach($projectUserListsTmp as $line){
+                    $projectUserLists[$line['user_id']] = $line['type'];
+                }
+            }else{
+                $projectUserLists = [];
+            }
+
+            //输出
+            return view('/project/user',
+                [
+                    'project_info'=>$projectInfo,
+                    'user_lists'=>$userLists,
+                    'project_user_lists'=>$projectUserLists,
+                    'menu_list'=>$projectMenu,
+                    'auth' => $auth,
+                ]
+            );
+        }
+    }
 }

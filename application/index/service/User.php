@@ -40,4 +40,12 @@ class User extends Model
             ->where(['id'=>$userID])
             ->find();
     }
+
+    /**
+     * 用户列表
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function lists(){
+        return db('user')->select();
+    }
 }
