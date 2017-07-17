@@ -218,9 +218,7 @@
 }
 
 .cus-drop .cus-drop-well {
-    /* width: 150px; */
     width: 100%;
-    border-right: 1px solid rgba(0, 0, 0, .15);
 }
 
 .cus-drop .cus-drop-well .cus-drop-item {
@@ -229,9 +227,15 @@
 
 .cus-drop .cus-drop-well .cus-drop-item a {
     width: 150px;
+    border-right: 1px solid rgba(0, 0, 0, .15);
+}
+
+.cus-drop .cus-drop-well .cus-drop-item.active .cus-drop-item-extra {
+    display: block;
 }
 
 .cus-drop .cus-drop-well .cus-drop-item .cus-drop-item-extra {
+    display: none;
     position: absolute;
     padding-right: 150px;
     left: 150px;

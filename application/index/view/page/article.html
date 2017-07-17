@@ -29,44 +29,48 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <input type="hidden" name="project_id" value="{$project_info.id}">
-                <input type="hidden" name="page_id" value="{$page_id}">
-                <input type="hidden" name="db_id" value="{$article_info.info.id}">
-                <button type="submit" class="btn btn-success btn-block btn-lg">编辑文档</button>
-                <br>
-                <a href="{:url('/tools/createdMDDbDoc')}" target="_blank">
-                    <button type="button" class="btn btn-info btn-block">快捷获取数据字典（MD格式）</button>
-                </a>
-            </div>
-        </div>
-        <div class="form-group">
             <label for="title" class="col-sm-2 control-label">tags 管理</label>
+            <input type="hidden" name="title" value="" id="tagsinput">
             <div class="col-sm-10">
                 <div class="bootstrap-tagsinput">
-                    <span class="tag label label-info">Amsterdam
+                    <span class="tag label label-info" data-id="123">Amsterdam
                         <span data-role="remove"></span>
                     </span>
-                    <span class="tag label label-info">Washington
+                    <span class="tag label label-info" data-id="124">Washington
                         <span data-role="remove"></span>
                     </span>
-                    <span class="tag label label-info">Sydney
-                        <span data-role="remove"></span>
-                    </span>
-                    <span class="tag label label-info">Beijing
-                        <span data-role="remove"></span>
-                    </span>
-                    <span class="tag label label-info">Cairo
-                        <span data-role="remove"></span>
-                    </span>
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action 
+                    <div class="input-group-btn dropup">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">API 
                             <span class="caret"></span>
                         </button>
-                        <div class="dropdown-menu dropdown-menu-top cus-drop">
+                        <div class="dropdown-menu cus-drop">
                             <ul class="nav nav-pills nav-stacked cus-drop-well">
-                                <li class="cus-drop-item" role="presentation" class="active">
+                                <!-- li -->
+                                <li class="cus-drop-item active" role="presentation">
                                     <a href="#">Home</a>
+                                    <div class="cus-drop-item-extra">
+                                        <div class="row">
+                                            <!-- col-md-3  -->
+                                            <div class="col-md-3" data-id="132">.col-md-1</div>
+                                            <div class="col-md-3" data-id="133">.col-md-1</div>
+                                            <div class="col-md-3" data-id="134">.col-md-1</div>
+                                            <div class="col-md-3" data-id="135">.col-md-1</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="cus-drop-item" role="presentation">
+                                    <a href="#">Profile</a>
+                                    <div class="cus-drop-item-extra">
+                                        <div class="row">
+                                            <div class="col-md-3">.col-md-2</div>
+                                            <div class="col-md-3">.col-md-2</div>
+                                            <div class="col-md-3">.col-md-2</div>
+                                            <div class="col-md-3">.col-md-2</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="cus-drop-item" role="presentation">
+                                    <a href="#">Messages</a>
                                     <div class="cus-drop-item-extra">
                                         <div class="row">
                                             <div class="col-md-3">.col-md-3</div>
@@ -76,12 +80,22 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li class="cus-drop-item" role="presentation"><a href="#">Profile</a></li>
-                                <li class="cus-drop-item" role="presentation"><a href="#">Messages</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="hidden" name="project_id" value="{$project_info.id}">
+                <input type="hidden" name="page_id" value="{$page_id}">
+                <input type="hidden" name="db_id" value="{$article_info.info.id}">
+                <button type="submit" class="btn btn-success btn-block btn-lg">编辑文档</button>
+                <br>
+                <a href="{:url('/tools/createdMDDbDoc')}" target="_blank">
+                    <button type="button" class="btn btn-info btn-block">快捷获取数据字典（MD格式）</button>
+                </a>
             </div>
         </div>
 </div>
@@ -102,6 +116,31 @@
             imageUpload: true,
             imageUploadURL: "{:url('/tools/upload')}",
         })
+    });
+    $('.cus-drop-item').mouseenter(function(ev) {
+        $(this).addClass('active').siblings('.cus-drop-item').removeClass('active');
+    });
+    $('.cus-drop-item-extra .row .col-md-3').click(function(ev) {
+        var str = '<span class="tag label label-info" data-id="' + $(this).data('id') + '">' + $(this).text() + '<span data-role="remove"></span></span>';
+        $('.bootstrap-tagsinput .input-group-btn').before(($(str)));
+        var lists = $('.bootstrap-tagsinput .tag');
+        var val = [];
+        lists.each(function(index, item) {
+            val.push($(item).data('id'));
+        });
+        val.push($(this).data('id'));
+        $('#tagsinput').val(val.join(','));
+
+    });
+    $('.bootstrap-tagsinput').delegate('.tag span', 'click', function(ev) {
+        var span = $(this).parent('.tag');
+        span.remove();
+        var lists = $('.bootstrap-tagsinput .tag');
+        var val = [];
+        lists.each(function(index, item) {
+            val.push($(item).data('id'));
+        });
+        $('#tagsinput').val(val.join(','));
     });
 </script>
 

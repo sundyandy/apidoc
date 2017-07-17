@@ -104,10 +104,13 @@ class Menu extends Model
      * @param $id
      * @return array|false|\PDOStatement|string|Model
      */
-    public function info($id){
-        return db('project_page')
-            ->where(['id'=>$id])
-            ->find();
+    public function info($id,$field=null){
+        $db = db('project_page')
+            ->where(['id'=>$id]);
+        if(isset($field)){
+            $db->field($field);
+        }
+        return $db->find();
     }
 
     /**
@@ -166,7 +169,8 @@ class Menu extends Model
      * @return false|\PDOStatement|string|\think\Collection
      */
     public function getApis($projectID){
-        return db('project_page')
+        $apis = db('project_page')
+            ->field(['id','title','pre_id'])
             ->where(
                 [
                     'project_id' => $projectID,
@@ -176,5 +180,28 @@ class Menu extends Model
             )
             ->order('path asc')
             ->select();
+        if(!empty($apis)){
+            foreach($apis as $line){
+                $pres[] = $line['pre_id'];
+                $tmp[$line['pre_id']][] = $line;
+            }
+
+            $pres = array_unique($pres);
+            foreach($pres as $key=>$pre){
+                $father = $this->info($pre,['id','title']);
+                if(!empty($father)){
+                    $res[$key] = $father;
+                }else{
+                    $res[$key] = [
+                        'id' => 0,
+                        'title' => '其他'
+                    ];
+                }
+                $res[$key]['child'] = $tmp[$pre];
+            }
+        }else{
+            $res = [];
+        }
+        return $res;
     }
 }
