@@ -29,16 +29,15 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="title" class="col-sm-2 control-label">tags 管理</label>
-            <input type="hidden" name="title" value="" id="tagsinput">
+            <label for="tagsinput" class="col-sm-2 control-label">涉及到的api</label>
+            <input type="hidden" name="apis"  value="" id="tagsinput">
             <div class="col-sm-10">
                 <div class="bootstrap-tagsinput">
-                    <span class="tag label label-info" data-id="123">Amsterdam
+                    {volist name="selectd_apis" id="api"}
+                    <span class="tag label label-info" data-id="{$api.id}">{$api.title}
                         <span data-role="remove"></span>
                     </span>
-                    <span class="tag label label-info" data-id="124">Washington
-                        <span data-role="remove"></span>
-                    </span>
+                    {/volist}
                     <div class="input-group-btn dropup">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">API 
                             <span class="caret"></span>
@@ -46,40 +45,18 @@
                         <div class="dropdown-menu cus-drop">
                             <ul class="nav nav-pills nav-stacked cus-drop-well">
                                 <!-- li -->
-                                <li class="cus-drop-item active" role="presentation">
-                                    <a href="#">Home</a>
-                                    <div class="cus-drop-item-extra">
-                                        <div class="row">
-                                            <!-- col-md-3  -->
-                                            <div class="col-md-3" data-id="132">.col-md-1</div>
-                                            <div class="col-md-3" data-id="133">.col-md-1</div>
-                                            <div class="col-md-3" data-id="134">.col-md-1</div>
-                                            <div class="col-md-3" data-id="135">.col-md-1</div>
+                                {volist name="apis" id="api"}
+                                    <li class="cus-drop-item" role="presentation">
+                                        <a href="#">{$api.title}</a>
+                                        <div class="cus-drop-item-extra">
+                                            <div class="row">
+                                                {volist name="api.child" id="vo"}
+                                                <div class="col-md-3" data-id="{$vo.id}">{$vo.title}</div>
+                                                {/volist}
+                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                                <li class="cus-drop-item" role="presentation">
-                                    <a href="#">Profile</a>
-                                    <div class="cus-drop-item-extra">
-                                        <div class="row">
-                                            <div class="col-md-3">.col-md-2</div>
-                                            <div class="col-md-3">.col-md-2</div>
-                                            <div class="col-md-3">.col-md-2</div>
-                                            <div class="col-md-3">.col-md-2</div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="cus-drop-item" role="presentation">
-                                    <a href="#">Messages</a>
-                                    <div class="cus-drop-item-extra">
-                                        <div class="row">
-                                            <div class="col-md-3">.col-md-3</div>
-                                            <div class="col-md-3">.col-md-3</div>
-                                            <div class="col-md-3">.col-md-3</div>
-                                            <div class="col-md-3">.col-md-3</div>
-                                        </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                {/volist}
                             </ul>
                         </div>
                     </div>
@@ -129,7 +106,7 @@
         lists.each(function(index, item) {
             val.push($(item).data('id'));
         });
-        if (!!~val.indexOf(id)) {
+        if (!!!~val.indexOf(id)) {
             val.push(id);
         }
         $('#tagsinput').val(val.join(','));

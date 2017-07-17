@@ -204,4 +204,25 @@ class Menu extends Model
         }
         return $res;
     }
+
+    /**
+     * 通过id查找api
+     * @param $ids
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function getApisByIDs($ids){
+        return db('project_page')
+            ->field(['id','title'])
+            ->where(
+                'id','in',explode(',',$ids)
+            )
+            ->where(
+                [
+                    'status' => 1,
+                    'type' => self::TYPE_API
+                ]
+            )
+            ->order('path asc')
+            ->select();
+    }
 }
