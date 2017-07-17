@@ -35,6 +35,14 @@ class AlertProjectPage extends Migrator
                 'length' => 255,
                 'comment' => 'id路径',
             )
-        )->save();
+        )
+            ->changeColumn('title', 'string',
+                array(
+                    'null' => true,
+                    'length' => 255,
+                    'comment' => '页面名称',
+                )
+            )
+            ->save();
     }
 }
