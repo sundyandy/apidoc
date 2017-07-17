@@ -371,6 +371,7 @@ class Project extends Base
                     'page_info'=>$pageInfo,
                     'article_info'=>$articleInfo,
                     'page_id'=>$pageID,
+                    'apis'=>$apis,
                 ]
             );
         }
