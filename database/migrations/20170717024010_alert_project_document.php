@@ -35,6 +35,13 @@ class AlertProjectDocument extends Migrator
             'length' => 255,
             'comment' => '关联api的id，格式为以半角逗号分隔的字符串，如1,2,3',
             )
-        )->update();
+        )
+            ->changeColumn('title', 'string',
+                array(
+                    'null' => true,
+                    'length' => 255,
+                    'comment' => '页面名称',
+                )
+            )->update();
     }
 }
