@@ -211,7 +211,6 @@
 }
 
 .cus-drop {
-    /* width: 750px; */
     height: 400px;
     width: 100%;
     overflow-y: scroll;
@@ -219,10 +218,12 @@
 
 .cus-drop .cus-drop-well {
     width: 100%;
+    overflow: hidden;
+    position: relative;
 }
 
 .cus-drop .cus-drop-well .cus-drop-item {
-    position: relative;
+    position: static;
 }
 
 .cus-drop .cus-drop-well .cus-drop-item a {
@@ -232,6 +233,7 @@
 
 .cus-drop .cus-drop-well .cus-drop-item.active .cus-drop-item-extra {
     display: block;
+    text-align: center;
 }
 
 .cus-drop .cus-drop-well .cus-drop-item .cus-drop-item-extra {
