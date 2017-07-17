@@ -360,6 +360,10 @@ class Project extends Base
 
             //基本信息
             $articleInfo = $pageService->getArticle($pageInfo['project_id'],$pageID);
+
+            //所有接口
+            $apis = $menuService->getApis($pageInfo['project_id']);
+
             //输出
             return view('/page/article',
                 [

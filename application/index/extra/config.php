@@ -17,4 +17,6 @@ return [
         'user/logout',
         'user/reg',
     ],
+
+    'imageUrl' => 'http://localhost/apidoc/public',
 ];

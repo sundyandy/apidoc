@@ -159,4 +159,22 @@ class Menu extends Model
             ->order('sort asc,id asc')
             ->find();
     }
+
+    /**
+     * 返回所有api的title
+     * @param $projectID
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function getApis($projectID){
+        return db('project_page')
+            ->where(
+                [
+                    'project_id' => $projectID,
+                    'status' => 1,
+                    'type' => self::TYPE_API
+                ]
+            )
+            ->order('path asc')
+            ->select();
+    }
 }
