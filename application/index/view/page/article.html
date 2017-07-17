@@ -121,25 +121,32 @@
         $(this).addClass('active').siblings('.cus-drop-item').removeClass('active');
     });
     $('.cus-drop-item-extra .row .col-md-3').click(function(ev) {
-        var str = '<span class="tag label label-info" data-id="' + $(this).data('id') + '">' + $(this).text() + '<span data-role="remove"></span></span>';
+        var id = $(this).data('id');
+        var str = '<span class="tag label label-info" data-id="' + id + '">' + $(this).text() + '<span data-role="remove"></span></span>';
         $('.bootstrap-tagsinput .input-group-btn').before(($(str)));
         var lists = $('.bootstrap-tagsinput .tag');
         var val = [];
         lists.each(function(index, item) {
             val.push($(item).data('id'));
         });
-        val.push($(this).data('id'));
+        if (!!~val.indexOf(id)) {
+            val.push(id);
+        }
         $('#tagsinput').val(val.join(','));
 
     });
     $('.bootstrap-tagsinput').delegate('.tag span', 'click', function(ev) {
         var span = $(this).parent('.tag');
+        var id = $(span).data('id');
         span.remove();
         var lists = $('.bootstrap-tagsinput .tag');
         var val = [];
         lists.each(function(index, item) {
             val.push($(item).data('id'));
         });
+        if (!!!~val.indexOf(id)) {
+            val.splice(val.indexOf(id), 1);
+        }
         $('#tagsinput').val(val.join(','));
     });
 </script>

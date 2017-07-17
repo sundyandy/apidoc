@@ -224,10 +224,16 @@
 
 .cus-drop .cus-drop-well .cus-drop-item {
     position: static;
+    width: 150px;
+}
+
+.cus-drop .cus-drop-well .cus-drop-item.active {
+    width: 100%;
 }
 
 .cus-drop .cus-drop-well .cus-drop-item a {
     width: 150px;
+    display: inline-block;
     border-right: 1px solid rgba(0, 0, 0, .15);
 }
 
@@ -244,6 +250,7 @@
     top: 0;
     width: 100%;
     overflow: hidden;
+    z-index: 10;
 }
 
 .cus-drop .cus-drop-well .cus-drop-item .cus-drop-item-extra .row .col-md-3 {
