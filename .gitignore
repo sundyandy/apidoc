@@ -3,3 +3,5 @@
 thinkphp
 composer.lock
 runtime
+.htaccess
+application/database.php

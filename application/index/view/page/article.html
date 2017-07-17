@@ -1,9 +1,4 @@
-{extend name="base/base" /}
-
-{block name="title"}管理文档{/block}
-{block name="sub_title"}文章管理 &nbsp;&nbsp;<small><a href="{:url('/project/menu',['project_id'=>$project_info.id])}">返回</a></small>{/block}
-
-{block name="content"}
+{extend name="base/base" /} {block name="title"}管理文档{/block} {block name="sub_title"}文章管理 &nbsp;&nbsp;<small><a href="{:url('/project/menu',['project_id'=>$project_info.id])}">返回</a></small>{/block} {block name="content"}
 <link rel="stylesheet" type="text/css" href="__STATIC__/markdown/css/editormd.css">
 <script src="__STATIC__/markdown/editormd.min.js"></script>
 
@@ -26,12 +21,13 @@
 
         <div class="form-group">
             <label for="editor" class="col-sm-2 control-label">内容</label>
-            <div class="col-sm-10" id="test-editormd">
+            <div class="col-sm-10">
                 <hr>
-                <textarea class="form-control" id="editor" name="content" placeholder="内容" cols="10" data-provide="markdown" >{$article_info.info.content|default=''}</textarea>
+                <div id="test-editormd">
+                    <textarea class="form-control" id="editor" name="content" placeholder="内容" cols="10" data-provide="markdown">{$article_info.info.content|default=''}</textarea>
+                </div>
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <input type="hidden" name="project_id" value="{$project_info.id}">
@@ -44,7 +40,52 @@
                 </a>
             </div>
         </div>
-    </form>
+        <div class="form-group">
+            <label for="title" class="col-sm-2 control-label">tags 管理</label>
+            <div class="col-sm-10">
+                <div class="bootstrap-tagsinput">
+                    <span class="tag label label-info">Amsterdam
+                        <span data-role="remove"></span>
+                    </span>
+                    <span class="tag label label-info">Washington
+                        <span data-role="remove"></span>
+                    </span>
+                    <span class="tag label label-info">Sydney
+                        <span data-role="remove"></span>
+                    </span>
+                    <span class="tag label label-info">Beijing
+                        <span data-role="remove"></span>
+                    </span>
+                    <span class="tag label label-info">Cairo
+                        <span data-role="remove"></span>
+                    </span>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action 
+                            <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-top cus-drop">
+                            <ul class="nav nav-pills nav-stacked cus-drop-well">
+                                <li class="cus-drop-item" role="presentation" class="active">
+                                    <a href="#">Home</a>
+                                    <div class="cus-drop-item-extra">
+                                        <div class="row">
+                                            <div class="col-md-3">.col-md-3</div>
+                                            <div class="col-md-3">.col-md-3</div>
+                                            <div class="col-md-3">.col-md-3</div>
+                                            <div class="col-md-3">.col-md-3</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="cus-drop-item" role="presentation"><a href="#">Profile</a></li>
+                                <li class="cus-drop-item" role="presentation"><a href="#">Messages</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</form>
 </div>
 
 <script type="text/javascript">
@@ -55,10 +96,10 @@
             width: "100%",
             height: 340,
             path: "__STATIC__/markdown/lib/",
-            toolbarIcons : function() {
+            toolbarIcons: function() {
                 return editormd.toolbarModes['full']; // full, simple, mini
             },
-            imageUpload:true,
+            imageUpload: true,
             imageUploadURL: "{:url('/tools/upload')}",
         })
     });
