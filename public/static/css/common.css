@@ -243,4 +243,15 @@
     left: 150px;
     top: 0;
     width: 100%;
+    overflow: hidden;
+}
+
+.cus-drop .cus-drop-well .cus-drop-item .cus-drop-item-extra .row .col-md-3 {
+    cursor: pointer;
+}
+
+.cus-drop .cus-drop-well .cus-drop-item .cus-drop-item-extra .row .col-md-3:hover {
+    color: #333;
+    background-color: #d4d4d4;
+    border-color: #8c8c8c;
 }
