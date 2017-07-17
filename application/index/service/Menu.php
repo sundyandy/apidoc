@@ -188,7 +188,15 @@ class Menu extends Model
 
             $pres = array_unique($pres);
             foreach($pres as $key=>$pre){
-                $res[$key] = $this->info($pre,['id','title']);
+                $father = $this->info($pre,['id','title']);
+                if(!empty($father)){
+                    $res[$key] = $father;
+                }else{
+                    $res[$key] = [
+                        'id' => 0,
+                        'title' => '其他'
+                    ];
+                }
                 $res[$key]['child'] = $tmp[$pre];
             }
         }else{
