@@ -31,7 +31,7 @@ class Tools extends Base
 
                 $sql = 'select table_name from information_schema.tables where table_schema = \''.$dbname.'\'';
                 $query = $mysqli->query($sql);
-                $content = '';
+                $content = "\r\n";
                 $i = 1;
                 while($row = $query->fetch_assoc()){
                     $tableInfo = $mysqli->query('select table_name,table_comment from information_schema.tables where table_schema = \''.$dbname.'\' and table_name = \''.$row['table_name'].'\' order by table_name asc ');
@@ -70,19 +70,19 @@ class Tools extends Base
      */
     public function showTable($mysqli,$tableName)
     {
-        $content = '';
+        $content = "";
         $query = $mysqli->query('show  full  columns from  ' . $tableName);
         $content.= '|字段|类型|默认值|Key|备注|';
         $content.= "\n";
         $content.= '|---|---|---|---|---|';
         $content.= "\n";
         while($line = $query->fetch_assoc()){
-            $content.= '|'.$line['Field'];
-            $content.= '|'.$line['Type'];
-            $content.= '|'.$line['Default'];
-            $content.= '|'.$line['Key'];
-            $content.= '|'.$line['Extra'].' '.$line['Comment'];
-            $content.= "\n";
+            $content.= '|'.$line['Field'].'&ensp;';
+            $content.= '|'.$line['Type'].'&ensp;';
+            $content.= '|'.$line['Default'].'&ensp;';
+            $content.= '|'.$line['Key'].'&ensp;';
+            $content.= '|'.$line['Extra'].' '.$line['Comment'].'&ensp;';
+            $content.= "| \n";
         }
         $content.= "\n\n";
         return $content;
