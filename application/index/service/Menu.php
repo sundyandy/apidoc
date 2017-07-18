@@ -65,6 +65,7 @@ class Menu extends Model
             'title' => $menuArray['title'],
             'type' => $menuArray['type'],
             'sort' => $menuArray['sort'],
+            'path' => '',
             'create_user_id' => session('user_id'),
             'status' => 1,
         ];
@@ -103,10 +104,13 @@ class Menu extends Model
      * @param $id
      * @return array|false|\PDOStatement|string|Model
      */
-    public function info($id){
-        return db('project_page')
-            ->where(['id'=>$id])
-            ->find();
+    public function info($id,$field=null){
+        $db = db('project_page')
+            ->where(['id'=>$id]);
+        if(isset($field)){
+            $db->field($field);
+        }
+        return $db->find();
     }
 
     /**
@@ -157,5 +161,68 @@ class Menu extends Model
             ->where($map)
             ->order('sort asc,id asc')
             ->find();
+    }
+
+    /**
+     * 返回所有api的title
+     * @param $projectID
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function getApis($projectID){
+        $apis = db('project_page')
+            ->field(['id','title','pre_id'])
+            ->where(
+                [
+                    'project_id' => $projectID,
+                    'status' => 1,
+                    'type' => self::TYPE_API
+                ]
+            )
+            ->order('path asc')
+            ->select();
+        if(!empty($apis)){
+            foreach($apis as $line){
+                $pres[] = $line['pre_id'];
+                $tmp[$line['pre_id']][] = $line;
+            }
+
+            $pres = array_unique($pres);
+            foreach($pres as $key=>$pre){
+                $father = $this->info($pre,['id','title']);
+                if(!empty($father)){
+                    $res[$key] = $father;
+                }else{
+                    $res[$key] = [
+                        'id' => 0,
+                        'title' => '其他'
+                    ];
+                }
+                $res[$key]['child'] = $tmp[$pre];
+            }
+        }else{
+            $res = [];
+        }
+        return $res;
+    }
+
+    /**
+     * 通过id查找api
+     * @param $ids
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function getApisByIDs($ids){
+        return db('project_page')
+            ->field(['id','title'])
+            ->where(
+                'id','in',explode(',',$ids)
+            )
+            ->where(
+                [
+                    'status' => 1,
+                    'type' => self::TYPE_API
+                ]
+            )
+            ->order('path asc')
+            ->select();
     }
 }

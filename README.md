@@ -14,10 +14,11 @@ https://pkg.phpcomposer.com
 
 ## 3.在根目录执行composer install
 
-## 4.修改数据库配置文件
-\application\database.php
+## 4.修改数据库等配置文件
+- \application\database.php 修改数据库配置
+- \application\index\config.php 修改imageUrl节点
 
 ## 5.运行migtate进行数据库初始化
 php think migrate:run
 
-## 6.如有需要，可指定域名
+## 6.如有需要，可指定域名(nginx/apache)

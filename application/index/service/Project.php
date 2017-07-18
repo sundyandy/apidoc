@@ -146,7 +146,7 @@ class Project extends Model
         return db('project_operate_log')
             ->join('project_page','project_page.id = project_operate_log.page_id')
             ->join('user','user.id = project_operate_log.operator_id')
-            ->field(['project_operate_log.*,project_page.id as page_id,project_page.title,project_page.type,user.realname'])
+            ->field(['project_operate_log.*,project_page.id as page_id,project_page.title,project_page.type as page_type,user.realname'])
             ->where(['project_operate_log.project_id' => $projectID])
             ->order('id desc')
             ->select();

@@ -1,9 +1,4 @@
-{extend name="base/base" /}
-
-{block name="title"}管理文档{/block}
-{block name="sub_title"}文章管理 &nbsp;&nbsp;<small><a href="{:url('/project/menu',['project_id'=>$project_info.id])}">返回</a></small>{/block}
-
-{block name="content"}
+{extend name="base/base" /} {block name="title"}管理文档{/block} {block name="sub_title"}文章管理 &nbsp;&nbsp;<small><a href="{:url('/project/menu',['project_id'=>$project_info.id])}">返回</a></small>{/block} {block name="content"}
 <link rel="stylesheet" type="text/css" href="__STATIC__/markdown/css/editormd.css">
 <script src="__STATIC__/markdown/editormd.min.js"></script>
 
@@ -26,12 +21,48 @@
 
         <div class="form-group">
             <label for="editor" class="col-sm-2 control-label">内容</label>
-            <div class="col-sm-10" id="test-editormd">
+            <div class="col-sm-10">
                 <hr>
-                <textarea class="form-control" id="editor" name="content" placeholder="内容" cols="10" data-provide="markdown" >{$article_info.info.content|default=''}</textarea>
+                <div id="test-editormd">
+                    <textarea class="form-control" id="editor" name="content" placeholder="内容" cols="10" data-provide="markdown">{$article_info.info.content|default=''}</textarea>
+                </div>
             </div>
         </div>
-
+        <div class="form-group">
+            <label for="tagsinput" class="col-sm-2 control-label">涉及到的api</label>
+            <input type="hidden" name="apis"  value="" id="tagsinput">
+            <div class="col-sm-10">
+                <div class="bootstrap-tagsinput">
+                    {volist name="selectd_apis" id="api"}
+                    <span class="tag label label-info" data-id="{$api.id}">{$api.title}
+                        <span data-role="remove"></span>
+                    </span>
+                    {/volist}
+                    <div class="input-group-btn dropup">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">API 
+                            <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu cus-drop">
+                            <ul class="nav nav-pills nav-stacked cus-drop-well">
+                                <!-- li -->
+                                {volist name="apis" id="api"}
+                                    <li class="cus-drop-item" role="presentation">
+                                        <a href="#">{$api.title}</a>
+                                        <div class="cus-drop-item-extra">
+                                            <div class="row">
+                                                {volist name="api.child" id="vo"}
+                                                <div class="col-md-3" data-id="{$vo.id}">{$vo.title}</div>
+                                                {/volist}
+                                             </div>
+                                        </div>
+                                    </li>
+                                {/volist}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <input type="hidden" name="project_id" value="{$project_info.id}">
@@ -44,7 +75,8 @@
                 </a>
             </div>
         </div>
-    </form>
+</div>
+</form>
 </div>
 
 <script type="text/javascript">
@@ -55,10 +87,44 @@
             width: "100%",
             height: 340,
             path: "__STATIC__/markdown/lib/",
-            toolbarIcons : function() {
+            toolbarIcons: function() {
                 return editormd.toolbarModes['full']; // full, simple, mini
             },
+            imageUpload: true,
+            imageUploadURL: "{:url('/tools/upload')}",
         })
+    });
+    $('.cus-drop-item').mouseenter(function(ev) {
+        $(this).addClass('active').siblings('.cus-drop-item').removeClass('active');
+    });
+    $('.cus-drop-item-extra .row .col-md-3').click(function(ev) {
+        var id = $(this).data('id');
+        var str = '<span class="tag label label-info" data-id="' + id + '">' + $(this).text() + '<span data-role="remove"></span></span>';
+        $('.bootstrap-tagsinput .input-group-btn').before(($(str)));
+        var lists = $('.bootstrap-tagsinput .tag');
+        var val = [];
+        lists.each(function(index, item) {
+            val.push($(item).data('id'));
+        });
+        if (!!!~val.indexOf(id)) {
+            val.push(id);
+        }
+        $('#tagsinput').val(val.join(','));
+
+    });
+    $('.bootstrap-tagsinput').delegate('.tag span', 'click', function(ev) {
+        var span = $(this).parent('.tag');
+        var id = $(span).data('id');
+        span.remove();
+        var lists = $('.bootstrap-tagsinput .tag');
+        var val = [];
+        lists.each(function(index, item) {
+            val.push($(item).data('id'));
+        });
+        if (!!!~val.indexOf(id)) {
+            val.splice(val.indexOf(id), 1);
+        }
+        $('#tagsinput').val(val.join(','));
     });
 </script>
 

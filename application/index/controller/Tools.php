@@ -87,4 +87,33 @@ class Tools extends Base
         $content.= "\n\n";
         return $content;
     }
+
+    /**
+     * 文件上传
+     * @param Request $request
+     * @return \think\response\Json
+     */
+    public function upload(Request $request){
+        // 获取表单上传文件 例如上传了001.jpg
+        $file = request()->file('editormd-image-file');
+        // 移动到框架应用根目录/public/uploads/ 目录下
+        $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
+        if($info){
+            // 输出 20160820/42a79759f284b767dfcb2a0197904287.jpg
+            $url = config('config.imageUrl'). DS . 'uploads'. DS .$info->getSaveName();
+            $success = 1;
+            $message = 'success';
+        }else{
+            $url = '';
+            $success = 0;
+            $message = $file->getError();
+        }
+        return json(
+            [
+                'success' => $success,
+                'url' => $url,
+                'message' => $message,
+            ]
+        );
+    }
 }

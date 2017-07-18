@@ -337,6 +337,7 @@ class Project extends Base
                 'content' => input('post.content',''),
                 'create_user_id' => session('user_id'),
                 'db_id' => input('post.db_id',0),
+                'apis' => input('post.apis',null),
             ];
             $pageService->addArticle($articleInfo);
             $this->success('编辑成功');
@@ -360,6 +361,14 @@ class Project extends Base
 
             //基本信息
             $articleInfo = $pageService->getArticle($pageInfo['project_id'],$pageID);
+
+            //所有接口
+            $apis = $menuService->getApis($pageInfo['project_id']);
+            if(!empty($articleInfo['info']['apis'])){
+                $selectdApis = $menuService->getApisByIDs($articleInfo['info']['apis']);
+            }else{
+                $selectdApis = [];
+            }
             //输出
             return view('/page/article',
                 [
@@ -367,6 +376,8 @@ class Project extends Base
                     'page_info'=>$pageInfo,
                     'article_info'=>$articleInfo,
                     'page_id'=>$pageID,
+                    'apis'=>$apis,
+                    'selectd_apis'=>$selectdApis,
                 ]
             );
         }
