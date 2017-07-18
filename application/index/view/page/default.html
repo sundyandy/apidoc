@@ -25,10 +25,10 @@
                         <td>{$vo.realname}</td>
                         <td>{$vo.type}</td>
                         <td>
-                            {eq name="vo.type" value="1"}
+                            {eq name="vo.page_type" value="1"}
                                 <span class="text-info">【API】</span>
                             {/eq}
-                            {eq name="vo.type" value="4"}
+                            {eq name="vo.page_type" value="4"}
                                 【文章】
                             {/eq}
                             <a href="{:url('/project/info',['id'=>$project_info.id,'page_id'=>$vo.page_id])}">{$vo.title}</a>
