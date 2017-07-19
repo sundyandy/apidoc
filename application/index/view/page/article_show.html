@@ -25,6 +25,13 @@
         <blockquote>
             <p>{$article_info.info.description|default=''}</p>
         </blockquote>
+
+        {if condition="!empty($apis)"}
+            <p class="bg-info h3title">涉及到的API:</p>
+            {volist name="apis" id="api"}
+            <li><a href="{:url('/project/info',['id'=>$api.project_id,'page_id'=>$api.id])}" target="_blank"> {$api.title} </a></li>
+            {/volist}
+        {/if}
         <hr>
         <div id="editormd-view">
             <textarea id="append-test" style="display:none;">
