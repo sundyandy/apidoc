@@ -212,7 +212,7 @@ class Menu extends Model
      */
     public function getApisByIDs($ids){
         return db('project_page')
-            ->field(['id','title'])
+            ->field(['id','title','project_id'])
             ->where(
                 'id','in',explode(',',$ids)
             )

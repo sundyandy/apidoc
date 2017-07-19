@@ -100,6 +100,11 @@ class Project extends Base
             if($pageInfo['type'] == $menuService::TYPE_ARTICLE){
                 //基本信息
                 $articleInfo = $pageService->getArticle($projectID,$pageID);
+                if(!empty($articleInfo['info']['apis'])){
+                    $apis = $menuService->getApisByIDs($articleInfo['info']['apis']);
+                }else{
+                    $apis = [];
+                }
                 //输出
                 return view('/page/article_show',
                     [
@@ -109,6 +114,7 @@ class Project extends Base
                         'page_id'=>$pageID,
                         'menu_list'=>$projectMenu,
                         'auth' => $auth,
+                        'apis' => $apis,
                     ]
                 );
             }
