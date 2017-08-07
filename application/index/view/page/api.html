@@ -1,9 +1,4 @@
-{extend name="base/base" /}
-
-{block name="title"}管理文档{/block}
-{block name="sub_title"}api管理&nbsp;&nbsp;<small><a href="{:url('/project/menu',['project_id'=>$project_info.id])}">返回</a></small>{/block}
-
-{block name="content"}
+{extend name="base/base" /} {block name="title"}管理文档{/block} {block name="sub_title"}api管理&nbsp;&nbsp;<small><a href="{:url('/project/menu',['project_id'=>$project_info.id])}">返回</a></small>{/block} {block name="content"}
 <div class="col-md-12">
 
     <form class="form-horizontal" method="post">
@@ -63,14 +58,6 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="remark" class="col-sm-2 control-label">返回json示例</label>
-            <div class="col-sm-10">
-                <textarea class="form-control" id="response" name="response" placeholder="返回json示例" rows="10">{$api_info.info.response|default=''}</textarea>
-            </div>
-        </div>
-
-        <hr>
-        <div class="form-group">
             <label for="remark" class="col-sm-2 control-label">入参
             <p><button name="add" type="button" class="btn btn-info">添加字段</button></p>
             </label>
@@ -83,14 +70,14 @@
                         <th width="25%">备注</th>
                     </tr>
                     {volist name="api_info.request" id="request"}
-                        <tr>
-                            <td>
-                                <input type="text" class="form-control" id="param_{$request.id}" name="param[{$request.id}]" placeholder="字段名称" value="{$request.param}">
-                            </td>
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" id="param_{$request.id}" name="param[{$request.id}]" placeholder="字段名称" value="{$request.param}">
+                        </td>
 
-                            <td>
-                                <div class="radio">
-                                    <label>
+                        <td>
+                            <div class="radio">
+                                <label>
                                         <input type="radio" name="is_must[{$request.id}]" id="is_must_{$request.id}1" value="1"
                                         <?php
                                             if($request['is_must']=='1'){
@@ -100,9 +87,9 @@
                                         >
                                         必填
                                     </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
+                            </div>
+                            <div class="radio">
+                                <label>
                                         <input type="radio" name="is_must[{$request.id}]" id="is_must_{$request.id}0" value="0"
                                         <?php
                                             if($request['is_must']=='0'){
@@ -112,12 +99,12 @@
                                         >
                                         非必填
                                     </label>
-                                </div>
-                            </td>
+                            </div>
+                        </td>
 
-                            <td>
-                                <div class="radio">
-                                    <label>
+                        <td>
+                            <div class="radio">
+                                <label>
                                         <input type="radio" name="type[{$request.id}]" id="type_{$request.id}1" value="string"
                                         <?php
                                             if($request['type']=='string'){
@@ -127,9 +114,9 @@
                                         >
                                         string
                                     </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
+                            </div>
+                            <div class="radio">
+                                <label>
                                         <input type="radio" name="type[{$request.id}]" id="type_{$request.id}0" value="int"
                                         <?php
                                             if($request['type']=='int'){
@@ -139,18 +126,18 @@
                                         >
                                         int
                                     </label>
-                                </div>
-                            </td>
+                            </div>
+                        </td>
 
-                            <td>
-                                <input type="text" class="form-control" id="remark_{$request.id}" name="remark[{$request.id}]" placeholder="备注" value="{$request.remark}">
-                            </td>
-                        </tr>
+                        <td>
+                            <input type="text" class="form-control" id="remark_{$request.id}" name="remark[{$request.id}]" placeholder="备注" value="{$request.remark}">
+                        </td>
+                    </tr>
                     {/volist}
 
                     <tr id="org">
                         <td>
-                            <input type="text" class="form-control"  name="new_param[]" placeholder="字段名称" value="">
+                            <input type="text" class="form-control" name="new_param[]" placeholder="字段名称" value="">
                         </td>
 
                         <td>
@@ -184,10 +171,19 @@
                         </td>
 
                         <td>
-                            <input type="text" class="form-control"  name="new_remark[]" placeholder="备注" value="">
+                            <input type="text" class="form-control" name="new_remark[]" placeholder="备注" value="">
                         </td>
                     </tr>
                 </table>
+            </div>
+        </div>
+
+        <hr>
+        <div class="form-group">
+            <label for="remark" class="col-sm-2 control-label">返回json示例</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" data-toggle="tooltip" data-trigger="click" data-placement="left" title="<h3>JSON字符串格式不正确</h3>" id="response" name="response" placeholder="返回json示例" rows="10">{$api_info.info.response|default=''}</textarea>
+                <button type="button" class="btn btn-primary" id="createTable">生成字段节点</button>
             </div>
         </div>
 
@@ -203,11 +199,140 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        $("button[name='add']").click(function(){
+    $(document).ready(function() {
+        $("button[name='add']").click(function() {
             var count = $("input[name='new_param[]']").length;
-            $('<tr><td><input type="text" class="form-control"  name="new_param[]" placeholder="字段名称" value=""></td><td><div class="radio"><label><input type="radio" name="new_is_must['+count+']"  value="1">必填</label></div><div class="radio"><label><input type="radio" name="new_is_must['+count+']"  value="0">非必填</label></div></td><td><div class="radio"><label><input type="radio" name="new_type['+count+']"  value="string">string</label></div><div class="radio"><label><input type="radio" name="new_type['+count+']"  value="int">int</label></div></td><td><input type="text" class="form-control"  name="new_remark[]" placeholder="备注" value=""></td></tr> ').insertAfter("tr[id='org']");
+            $('<tr><td><input type="text" class="form-control"  name="new_param[]" placeholder="字段名称" value=""></td><td><div class="radio"><label><input type="radio" name="new_is_must[' + count + ']"  value="1">必填</label></div><div class="radio"><label><input type="radio" name="new_is_must[' + count + ']"  value="0">非必填</label></div></td><td><div class="radio"><label><input type="radio" name="new_type[' + count + ']"  value="string">string</label></div><div class="radio"><label><input type="radio" name="new_type[' + count + ']"  value="int">int</label></div></td><td><input type="text" class="form-control"  name="new_remark[]" placeholder="备注" value=""></td></tr> ').insertAfter("tr[id='org']");
         });
+        $('#createTable').click(function() {
+            var str = $.trim($('#response').val());
+            var json;
+            try {
+                json = JSON.parse(str);
+                $("#response").tooltip('hide');
+            } catch (e) {
+                $("#response").tooltip({
+                    html: true
+                }).tooltip('show');
+                return false;
+            }
+            var i = 0;
+            var renderTable = function(arr, key) {
+                var caption = '';
+
+                var head = '<table class="table table-striped"><caption class="highlight">' + key + '</caption><thead>';
+                var trth = '<tr><th>字段名</th><th>类型</th><th>说明</th><th>备注</th></tr>';
+                var headEnd = '</thead>';
+                var body = '<tbody>';
+                var tdtd = '';
+                var end = '</tbody></table>';
+                arr.forEach(function(o) {
+                    if (o) {
+                        tdtd += '<tr><td>' + o.name + '</td><td>' + o.type + '</td><td>' + o.input + '</td><td>' + o.remark + '</td></tr>';
+                    }
+                });
+                $('.form-horizontal').append(head + trth + headEnd + body + tdtd + end);
+            };
+            var renderSingle = function(obj, key) {
+                var res;
+                if ($.type(obj.val) === 'object') {
+                    renderJSON(obj.val, key + '.');
+                    // res = {
+                    //     name: obj.key,
+                    //     type: 'object',
+                    //     input: '',
+                    //     remark: '',
+                    //     content: obj.val
+                    // };
+                }
+                // 取第一个
+                if ($.type(obj.val) === 'array') {
+                    var first = obj.val[0];
+                    if (first) {
+                        var tmp = renderSingle({key: key, val: first}, key);
+                        if (tmp) {
+                            // console.log(tmp, key);
+                            renderTable([tmp], key + '[0]');
+                        }
+                        res = {
+                            name: obj.key,
+                            type: 'array',
+                            input: '',
+                            remark: '',
+                            content: obj.val
+                        };
+
+                    }
+                }
+                // push
+                if ($.type(obj.val) === 'number') {
+                    res = {
+                        name: obj.key,
+                        type: 'number',
+                        input: '',
+                        remark: '',
+                        content: obj.val
+                    };
+                }
+                // 情况1 普通字符串
+                // 情况2 json字符串
+                if ($.type(obj.val) === 'string') {
+                    var tmpjson;
+                    if (isNaN(Number(obj))) {
+                        try {
+                            tmpjson = JSON.parse(obj.val);
+                            renderJSON(val, key + '.' + obj.key);
+                        } catch (e) {
+                            res = {
+                                name: obj.key,
+                                type: 'string',
+                                input: '',
+                                remark: '',
+                                content: obj.val
+                            };
+                        }
+                    } else {
+                        res = {
+                            name: obj.key,
+                            type: 'string',
+                            input: '',
+                            remark: '',
+                            content: obj.val
+                        };
+                    }
+                }
+                if ($.type(obj.val) === 'null') {
+                    res = {
+                        name: obj.key,
+                        type: 'null',
+                        input: '',
+                        remark: '',
+                        content: obj.val
+                    };
+                }
+                return res;
+            };
+            var renderJSON = function(obj, ori) {
+                var tmpARRAY = [];
+                var keys = Object.keys(obj);
+                if (keys.length) {
+                    keys.forEach(function(key) {
+                        var res = renderSingle({key: key, val: obj[key]}, ori + '.' + key);
+                        tmpARRAY.push(res);
+                    });
+                    if (tmpARRAY.length) {
+                        renderTable(tmpARRAY, ori);
+                    }
+                }
+
+            };
+            Object.keys(json).forEach(function(key) {
+                if (key === 'data') {
+                    renderJSON(json[key], key);
+                }
+            });
+        });
+
     });
 </script>
 {/block}

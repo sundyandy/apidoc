@@ -262,3 +262,9 @@
     background-color: #d4d4d4;
     border-color: #8c8c8c;
 }
+
+.highlight {
+    font-size: 20px;
+    color: #000;
+    font-weight: bold;
+}
