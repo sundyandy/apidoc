@@ -31,6 +31,9 @@
                             if(isset($api_info['info']['method']) && $api_info['info']['method']=='post'){
                                 echo 'checked';
                             }
+                            if(!isset($api_info['info']['method'])){
+                                echo 'checked';
+                            }
                         ?>
                         >
                         POST
