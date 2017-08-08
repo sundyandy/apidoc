@@ -225,4 +225,16 @@ class Menu extends Model
             ->order('path asc')
             ->select();
     }
+
+    /**
+     * 菜单列表
+     * @param $projectID
+     * @return false|\PDOStatement|string|\think\Collection
+     */
+    public function listsV2($projectID){
+        return db('project_page')
+            ->where(['project_id'=>$projectID,'status'=>1])
+            ->order('path asc,sort asc,id desc')
+            ->select();
+    }
 }

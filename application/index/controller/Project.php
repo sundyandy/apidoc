@@ -144,7 +144,7 @@ class Project extends Base
                     $url = '';
                     break;
             }
-            $this->success('添加成功',$url);
+            $this->success('添加成功',$url,'',1);
         }else{
             $projectService = new \app\index\service\Project();
             //项目详情
@@ -159,11 +159,16 @@ class Project extends Base
 
             //菜单
             $projectMenu = $menuService->lists($projectID);
+            $projectMenuV2 = $menuService->listsV2($projectID);
+            ############ for test ############
+//            echo '<pre>';print_r($projectMenu);die('###');
+            ############ for test ############
             //输出
-            return view('/project/menu',
+            return view('/project/menuV2',
                 [
                     'project_info'=>$projectInfo,
                     'menu_list'=>$projectMenu,
+                    'menu_list_v2'=>$projectMenuV2,
                     'auth' => $auth
                 ]
             );
@@ -198,7 +203,7 @@ class Project extends Base
             //编辑
             $edit = input('post.');
             $menuService->edit($edit);
-            $this->success('编辑成功');
+            $this->success('编辑成功',null,'',1);
         }else{
             $this->error('缺少参数');
         }
