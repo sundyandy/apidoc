@@ -1,7 +1,15 @@
 {extend name="base/base" /}
 
 {block name="title"}项目明细{/block}
-{block name="sub_title"}{$project_info.project_name} <small>{$project_info.description}</small>{/block}
+{block name="sub_title"}
+    {$project_info.project_name}
+    <small>
+        {$project_info.description}
+        {eq name="auth.edit" value="1"}
+        | <a href="{:url('/project/articleedit',['page_id'=>$page_id])}">编辑</a>
+        {/eq}
+    </small>
+{/block}
 
 {block name="content"}
 <link rel="stylesheet" type="text/css" href="__STATIC__/markdown/css/editormd.preview.min.css">

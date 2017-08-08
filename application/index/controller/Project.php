@@ -131,8 +131,20 @@ class Project extends Base
         $menuService = new \app\index\service\Menu();
         if(request()->isPost()){
             $add = input('post.');
-            $menuService->add($add);
-            $this->success('添加成功');
+            $return = $menuService->add($add);
+            $type = input('post.type');
+            switch ($type){
+                case '1':
+                    $url = url('project/apidocedit',['page_id'=>$return['id']]);
+                    break;
+                case '4':
+                    $url = url('project/articleedit',['page_id'=>$return['id']]);
+                    break;
+                default:
+                    $url = '';
+                    break;
+            }
+            $this->success('添加成功',$url);
         }else{
             $projectService = new \app\index\service\Project();
             //项目详情
