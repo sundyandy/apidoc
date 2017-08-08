@@ -21,30 +21,18 @@
     </div>
     <div class="col-md-8">
         <h1>{$page_info.title|default=''} <small>创建人：{$api_info.author.realname}</small></h1>
-
+        {if condition="$api_info.info.descrition neq ''"}
         <blockquote>
             <p>{$api_info.info.descrition|default=''}</p>
         </blockquote>
+        {/if}
         <hr>
         <p class="bg-info h3title">API URI:</p>
         <li>{$api_info.info.uri|default=''}</li>
         <p class="bg-info h3title">Method:</p>
         <li>{$api_info.info.method|default=''}</li>
-        <p class="bg-info h3title">备注:</p>
-        <li>{$api_info.info.remark|default=''}</li>
-        <p class="bg-info h3title">返回json示例:</p>
-        <!--<li>{$api_info.info.response|default=''}</li>-->
-        <!--<div id="editormd-view">-->
-            <!--<textarea id="append-test" style="display:none;">-->
-<!--```json-->
-<!--{$api_info.info.response|default=''}-->
-<!--```-->
-            <!--</textarea>-->
-        <!--</div>-->
-        <p id='container'></p>
 
         <p class="bg-info h3title">入参:</p>
-
         <table class="table table-bordered table-striped">
             <tr>
                 <th width="25%">字段名称</th>
@@ -61,6 +49,21 @@
             </tr>
             {/volist}
         </table>
+
+        <p class="bg-info h3title">备注:</p>
+        <li>{$api_info.info.remark|default=''}</li>
+        <p class="bg-info h3title">返回json示例:</p>
+        <!--<li>{$api_info.info.response|default=''}</li>-->
+        <!--<div id="editormd-view">-->
+            <!--<textarea id="append-test" style="display:none;">-->
+<!--```json-->
+<!--{$api_info.info.response|default=''}-->
+<!--```-->
+            <!--</textarea>-->
+        <!--</div>-->
+        <p id='container'></p>
+
+
     </div>
 </div>
 
