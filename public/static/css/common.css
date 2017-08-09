@@ -262,3 +262,31 @@
     background-color: #d4d4d4;
     border-color: #8c8c8c;
 }
+
+.highlight {
+    font-size: 20px;
+    color: #000;
+    font-weight: bold;
+}
+
+
+/* 新版树形折叠菜单 */
+.nav_content{width:90%;margin:10px auto;}
+.filterinput{
+    background-color:rgba(249, 244, 244, 0);
+    border-radius:15px;
+    width:90%;
+    height:30px;
+    border:thin solid #FFF;
+    text-indent:0.5em;
+    font-weight:bold;
+    color:#FFF;
+}
+#demo-list a{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+    white-space:nowrap;
+    width:100%;
+}
+

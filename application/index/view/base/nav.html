@@ -1,65 +1,203 @@
-<div class="tree well">
-    <ul>
-        {volist name="menu_list" id="vo"}
-        <li>
-            {neq name="vo.type" value="5"}
-            <a href="{:url('project/info',['id'=>$project_info.id,'page_id'=>$vo.id])}">{$vo.title}</a>
-            {else/}
-            {$vo.title}
-            {/neq}
+<link href="__STATIC__/menu/jquery-accordion-menu.css" rel="stylesheet">
+<link href="__STATIC__/menu/font-awesome.css" rel="stylesheet">
+<script src="__STATIC__/menu/jquery-accordion-menu.js" type="text/javascript"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery("#jquery-accordion-menu").jqueryAccordionMenu();
 
-            {eq name="vo.has_child" value="1"}
-            <ul>
-                {volist name="vo.child" id="child"}
-                <li>
-                    {neq name="child.type" value="5"}
-                    <a href="{:url('project/info',['id'=>$project_info.id,'page_id'=>$child.id])}">{$child.title}</a>
-                    {else/}
-                    {$child.title}
-                    {/neq}
-                    <!--level3-->
-                    {eq name="child.has_child" value="1"}
-                    <ul>
-                        {volist name="child.child" id="childchild"}
-                        <li>
-                            {neq name="childchild.type" value="5"}
-                            <a href="{:url('project/info',['id'=>$project_info.id,'page_id'=>$childchild.id])}">{$childchild.title}</a>
-                            {else/}
-                            {$childchild.title}
-                            {/neq}
-                        </li>
-                        {/volist}
-                    </ul>
-                </li>
+    });
+
+    $(function(){
+        //顶部导航切换
+        $("#demo-list li").click(function(){
+            $("#demo-list li.active").removeClass("active")
+            $(this).addClass("active");
+        })
+    })
+</script>
+<div class="nav_content">
+
+    <div id="jquery-accordion-menu" class="jquery-accordion-menu white">
+        <ul id="demo-list">
+            {volist name="menu_list" id="vo"}
+            <li data-id="{$vo.id}">
+                {neq name="vo.type" value="5"}
+                <a href="{:url('project/info',['id'=>$project_info.id,'page_id'=>$vo.id])}">{$vo.title}</a>
                 {else/}
-                </li>
-                {/eq}
-                <!--level3-->
+                <a href="#">{$vo.title}</a>
+                {/neq}
 
-                </li>
-                {/volist}
-            </ul>
-        </li>
-        {else/}
-        </li>
-        {/eq}
-        {/volist}
-        <hr>
-        <li>
-            <a href="{:url('/project/info',['id'=>$project_info.id])}">文档历史</a>
-        </li>
-        <li>
-            <a href="{:url('/project/index')}">返回首页</a>
-        </li>
-        {eq name="auth.edit" value="1"}
+                {eq name="vo.has_child" value="1"}
+                <ul class="submenu">
+                    {volist name="vo.child" id="child"}
+                    <li data-id="{$child.id}">
+                        {neq name="child.type" value="5"}
+                        <a href="{:url('project/info',['id'=>$project_info.id,'page_id'=>$child.id])}">{$child.title}</a>
+                        {else/}
+                        <a href="#">{$child.title}</a>
+                        {/neq}
+                        <!--level3-->
+                        {eq name="child.has_child" value="1"}
+                        <ul class="submenu">
+                            {volist name="child.child" id="childchild"}
+                            <li data-id="{$childchild.id}">
+                                {neq name="childchild.type" value="5"}
+                                <a href="{:url('project/info',['id'=>$project_info.id,'page_id'=>$childchild.id])}">{$childchild.title}</a>
+                                {else/}
+                                <a href="#">{$childchild.title}</a>
+                                {/neq}
+                            </li>
+                            {/volist}
+                        </ul>
+                    </li>
+                    {else/}
+                    </li>
+                    {/eq}
+                    <!--level3-->
+
+                    </li>
+                    {/volist}
+                </ul>
+            </li>
+            {else/}
+            </li>
+            {/eq}
+            {/volist}
+            <li>
+                <a href="{:url('/project/info',['id'=>$project_info.id])}">文档历史</a>
+            </li>
+            <li>
+                <a href="{:url('/project/index')}">返回首页</a>
+            </li>
+            {eq name="auth.edit" value="1"}
             <li>
                 <a href="{:url('/project/menu',['project_id'=>$project_info.id])}">*管理菜单*</a>
             </li>
-        {/eq}
-        {eq name="project_info.create_user_id" value="$Think.session.user_id"}
-        <li>
-            <a href="{:url('/project/user',['id'=>$project_info.id])}">*管理项目成员*</a>
-        </li>
-        {/eq}
-    </ul>
+            {/eq}
+            {eq name="project_info.create_user_id" value="$Think.session.user_id"}
+            <li>
+                <a href="{:url('/project/user',['id'=>$project_info.id])}">*管理项目成员*</a>
+            </li>
+            {/eq}
+        </ul>
+    </div>
 </div>
+<script type="text/javascript">
+    (function($) {
+        $.expr[":"].Contains = function(a, i, m) {
+            return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+        };
+        function filterList(header, list) {
+            //@header 头部元素
+            //@list 无需列表
+            //创建一个搜素表单
+            var form = $("<form>").attr({
+                "class":"filterform",
+                action:"#"
+            }), input = $("<input>").attr({
+                "class":"filterinput",
+                type:"text"
+            });
+            $(form).append(input).appendTo(header);
+            $(input).change(function() {
+                var filter = $(this).val();
+                if (filter) {
+                    $matches = $(list).find("a:Contains(" + filter + ")").parent();
+                    $("li", list).not($matches).slideUp();
+                    $matches.slideDown();
+                } else {
+                    $(list).find("li").slideDown();
+                }
+                return false;
+            }).keyup(function() {
+                $(this).change();
+            });
+        }
+        $(function() {
+            filterList($("#form"), $("#demo-list"));
+
+            {if condition="isset($page_id)"}
+            var curItem = $('[data-id={$page_id}]');
+            var tm = curItem.children('ul');
+            curItem.addClass('current');
+            tm.addClass('submenu');
+            curItem.addClass('current');
+            var parUL = curItem.parents('.submenu');
+            $(parUL).show();
+            var top = $(parUL).parent('li');
+            if (top) {
+                $(top).addClass('active');
+            }
+            {/if}
+
+        });
+    })(jQuery);
+</script>
+
+
+
+<!--<div class="tree well">-->
+    <!--<ul>-->
+        <!--{volist name="menu_list" id="vo"}-->
+        <!--<li>-->
+            <!--{neq name="vo.type" value="5"}-->
+            <!--<a href="{:url('project/info',['id'=>$project_info.id,'page_id'=>$vo.id])}">{$vo.title}</a>-->
+            <!--{else/}-->
+            <!--{$vo.title}-->
+            <!--{/neq}-->
+
+            <!--{eq name="vo.has_child" value="1"}-->
+            <!--<ul>-->
+                <!--{volist name="vo.child" id="child"}-->
+                <!--<li>-->
+                    <!--{neq name="child.type" value="5"}-->
+                    <!--<a href="{:url('project/info',['id'=>$project_info.id,'page_id'=>$child.id])}">{$child.title}</a>-->
+                    <!--{else/}-->
+                    <!--{$child.title}-->
+                    <!--{/neq}-->
+                    <!--&lt;!&ndash;level3&ndash;&gt;-->
+                    <!--{eq name="child.has_child" value="1"}-->
+                    <!--<ul>-->
+                        <!--{volist name="child.child" id="childchild"}-->
+                        <!--<li>-->
+                            <!--{neq name="childchild.type" value="5"}-->
+                            <!--<a href="{:url('project/info',['id'=>$project_info.id,'page_id'=>$childchild.id])}">{$childchild.title}</a>-->
+                            <!--{else/}-->
+                            <!--{$childchild.title}-->
+                            <!--{/neq}-->
+                        <!--</li>-->
+                        <!--{/volist}-->
+                    <!--</ul>-->
+                <!--</li>-->
+                <!--{else/}-->
+                <!--</li>-->
+                <!--{/eq}-->
+                <!--&lt;!&ndash;level3&ndash;&gt;-->
+
+                <!--</li>-->
+                <!--{/volist}-->
+            <!--</ul>-->
+        <!--</li>-->
+        <!--{else/}-->
+        <!--</li>-->
+        <!--{/eq}-->
+        <!--{/volist}-->
+        <!--<hr>-->
+        <!--<li>-->
+            <!--<a href="{:url('/project/info',['id'=>$project_info.id])}">文档历史</a>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<a href="{:url('/project/index')}">返回首页</a>-->
+        <!--</li>-->
+        <!--{eq name="auth.edit" value="1"}-->
+            <!--<li>-->
+                <!--<a href="{:url('/project/menu',['project_id'=>$project_info.id])}">*管理菜单*</a>-->
+            <!--</li>-->
+        <!--{/eq}-->
+        <!--{eq name="project_info.create_user_id" value="$Think.session.user_id"}-->
+        <!--<li>-->
+            <!--<a href="{:url('/project/user',['id'=>$project_info.id])}">*管理项目成员*</a>-->
+        <!--</li>-->
+        <!--{/eq}-->
+    <!--</ul>-->
+<!--</div>-->

@@ -1,7 +1,14 @@
 {extend name="base/base" /}
 
 {block name="title"}项目明细{/block}
-{block name="sub_title"}{$project_info.project_name} <small>{$project_info.description}</small>{/block}
+{block name="sub_title"}{$project_info.project_name}
+    <small>
+        {$project_info.description}
+        {eq name="auth.edit" value="1"}
+           | <a href="{:url('/project/apidocedit',['page_id'=>$page_id])}">编辑</a>
+        {/eq}
+    </small>
+{/block}
 
 {block name="content"}
 <link rel="stylesheet" type="text/css" href="__STATIC__/markdown/css/editormd.preview.min.css">
@@ -21,28 +28,18 @@
     </div>
     <div class="col-md-8">
         <h1>{$page_info.title|default=''} <small>创建人：{$api_info.author.realname}</small></h1>
-
+        {if condition="$api_info.info.descrition neq ''"}
         <blockquote>
             <p>{$api_info.info.descrition|default=''}</p>
         </blockquote>
+        {/if}
         <hr>
         <p class="bg-info h3title">API URI:</p>
         <li>{$api_info.info.uri|default=''}</li>
         <p class="bg-info h3title">Method:</p>
         <li>{$api_info.info.method|default=''}</li>
-        <p class="bg-info h3title">备注:</p>
-        <li>{$api_info.info.remark|default=''}</li>
-        <p class="bg-info h3title">返回json示例:</p>
-        <li>{$api_info.info.response|default=''}</li>
-        <div id="editormd-view">
-            <textarea id="append-test" style="display:none;">
-```json
-{$api_info.info.response|default=''}
-```
-            </textarea>
-        </div>
-        <p class="bg-info h3title">入参:</p>
 
+        <p class="bg-info h3title">入参:</p>
         <table class="table table-bordered table-striped">
             <tr>
                 <th width="25%">字段名称</th>
@@ -59,38 +56,74 @@
             </tr>
             {/volist}
         </table>
+
+        <p class="bg-info h3title">备注:</p>
+        <li>{$api_info.info.remark|default=''}</li>
+        <p class="bg-info h3title">返回json示例:</p>
+        <!--<li>{$api_info.info.response|default=''}</li>-->
+        <!--<div id="editormd-view">-->
+            <!--<textarea id="append-test" style="display:none;">-->
+<!--```json-->
+<!--{$api_info.info.response|default=''}-->
+<!--```-->
+            <!--</textarea>-->
+        <!--</div>-->
+        <p id='container'></p>
+
+
     </div>
 </div>
 
-<script>
-    $(function () {
-        $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
-        $('.tree li.parent_li > span').on('click', function (e) {
-            var children = $(this).parent('li.parent_li').find(' > ul > li');
-            if (children.is(":visible")) {
-                children.hide('fast');
-                $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
-            } else {
-                children.show('fast');
-                $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
-            }
-            e.stopPropagation();
-        });
+<script type="text/javascript" src="__STATIC__/jsonFormater/jsonFormater.js"></script>
+<link href="__STATIC__/jsonFormater/jsonFormater.css" type="text/css" rel="stylesheet"/>
 
-        var testEditormdView;
-        $.get("test.md", function(markdown) {
-            testEditormdView = editormd.markdownToHTML("editormd-view", {
-                markdown        : markdown ,//+ "\r\n" + $("#append-test").text(),
-                htmlDecode      : "style,script,iframe",  // you can filter tags decode
-                tocm            : true,    // Using [TOCM]
-                emoji           : true,
-                taskList        : true,
-                tex             : true,  // 默认不解析
-                flowChart       : true,  // 默认不解析
-                sequenceDiagram : true,  // 默认不解析
-            });
-        });
+<?php
+$json = str_replace(array("\r\n", "\r", "\n"), "", $api_info['info']['response']);
+?>
+<script>
+    $(document).ready(function(){
+        if({$json}){
+            var options = {
+                dom : '#container', //对应容器的css选择器
+                isCollapsible: true,
+                imgCollapsed: "__STATIC__/jsonFormater/images/Collapsed.gif", //收起的图片路径
+                imgExpanded: "__STATIC__/jsonFormater/images/Expanded.gif",  //展开的图片路径
+
+            };
+            var jf = new JsonFormater(options); //创建对象
+            jf.doFormat('{$json}'); //格式化json
+        }
+
     });
+
+//    $(function () {
+//        $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+//        $('.tree li.parent_li > span').on('click', function (e) {
+//            var children = $(this).parent('li.parent_li').find(' > ul > li');
+//            if (children.is(":visible")) {
+//                children.hide('fast');
+//                $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+//            } else {
+//                children.show('fast');
+//                $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+//            }
+//            e.stopPropagation();
+//        });
+//
+//        var testEditormdView;
+//        $.get("test.md", function(markdown) {
+//            testEditormdView = editormd.markdownToHTML("editormd-view", {
+//                markdown        : markdown ,//+ "\r\n" + $("#append-test").text(),
+//                htmlDecode      : "style,script,iframe",  // you can filter tags decode
+//                tocm            : true,    // Using [TOCM]
+//                emoji           : true,
+//                taskList        : true,
+//                tex             : true,  // 默认不解析
+//                flowChart       : true,  // 默认不解析
+//                sequenceDiagram : true,  // 默认不解析
+//            });
+//        });
+//    });
 </script>
 
 
