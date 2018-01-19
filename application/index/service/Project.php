@@ -234,4 +234,30 @@ class Project extends Model
             return [];
         }
     }
+
+    /**
+     * 通过project_api_request.id，反推所在项目（project）的信息
+     * @param $apiParamID
+     * @return array|false|\PDOStatement|string|Model
+     */
+    public function getProjectFromApiParamID($apiParamID){
+        $projectApi = db('project_api_request')
+            ->join('project_api', 'project_api_request.api_id=project_api.id')
+            ->field('project_api.*')
+            ->where(['project_api_request.id'=>$apiParamID])
+            ->find();
+        return $this->info($projectApi['project_id']);
+    }
+
+    /**
+     * 删除project_api_request一行
+     * @param $apiParamID
+     * @return int
+     */
+    public function delApiParam($apiParamID){
+        return db('project_api_request')
+            ->where(['project_api_request.id'=>$apiParamID])
+            ->delete();
+    }
+
 }

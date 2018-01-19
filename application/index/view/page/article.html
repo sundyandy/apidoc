@@ -1,6 +1,15 @@
 {extend name="base/base" /}
 {block name="title"}管理文档{/block}
-{block name="sub_title"}文章管理 &nbsp;&nbsp;<small><a href="{:url('/project/menu',['project_id'=>$project_info.id])}">返回</a> | <a href="{:url('/project/info',['id'=>$project_info.id,'page_id'=>$page_id])}">查看</a></small>{/block}
+{block name="sub_title"}文章管理 &nbsp;&nbsp;
+<small>
+    <a href="{:url('/project/menu',['project_id'=>$project_info.id])}">
+        <button type="button" class="btn btn-info">返回</button>
+    </a>
+    <a href="{:url('/project/info',['id'=>$project_info.id,'page_id'=>$page_id])}">
+        <button type="button" class="btn btn-info">查看</button>
+    </a>
+</small>
+{/block}
 {block name="content"}
 <link rel="stylesheet" type="text/css" href="__STATIC__/markdown/css/editormd.css">
 <script src="__STATIC__/markdown/editormd.min.js"></script>

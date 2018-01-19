@@ -6,7 +6,7 @@
     <small>
         {$project_info.description}
         {eq name="auth.edit" value="1"}
-        | <a href="{:url('/project/articleedit',['page_id'=>$page_id])}">编辑</a>
+        | <a href="{:url('/project/articleedit',['page_id'=>$page_id])}"><button type="button" class="btn btn-info">编辑</button></a>
         {/eq}
     </small>
 {/block}

@@ -8,7 +8,6 @@
 
 namespace app\index\controller;
 
-
 use think\Request;
 
 class Project extends Base
@@ -280,20 +279,25 @@ class Project extends Base
             $apiID = $pageService->addApiInfo($apiInfo);
 
             //request new
-            $requestCount = count($_POST['new_param']);
-            if($requestCount && !empty($_POST['new_param'][0])){
-                for($i=0;$i<$requestCount;$i++){
-                    $request = [
-                        'api_id' => $apiID,
-                        'param' => input("post.new_param.{$i}",''),
-                        'is_must' => input("post.new_is_must.{$i}",0),
-                        'type' => input("post.new_type.{$i}",'string'),
-                        'remark' => input("post.new_remark.{$i}",''),
-                    ];
-                    $pageService->addApiRequest($request);
+            if(isset($_POST['new_param'])){
+                $requestCount = count($_POST['new_param']);
+                if($requestCount && !empty($_POST['new_param'][0])){
+                    $param = array_values($_POST['new_param']);
+                    $is_must = array_values($_POST['new_is_must']);
+                    $type = array_values($_POST['new_type']);
+                    $remark = array_values($_POST['new_remark']);
+                    for($i=0;$i<$requestCount;$i++){
+                        $request = [
+                            'api_id' => $apiID,
+                            'param' => $param[$i],
+                            'is_must' => $is_must[$i],
+                            'type' => $type[$i],
+                            'remark' => $remark[$i],
+                        ];
+                        $pageService->addApiRequest($request);
+                    }
                 }
             }
-
             if(!empty($_POST['param'])){
                 foreach($_POST['param'] as $key=>$param){
                     $request = [
@@ -453,5 +457,26 @@ class Project extends Base
                 ]
             );
         }
+    }
+
+    /**
+     * 删除入参
+     * @param Request $request
+     */
+    public function delParam(Request $request){
+        $projectService = new \app\index\service\Project();
+
+        $paramID = input('param_id');
+        $projectInfo = $projectService->getProjectFromApiParamID($paramID);
+        //检查用户的项目权限
+        $auth = $projectService->checkUserProjectAuth($projectInfo,session('user_id'));
+        if($auth['edit'] == 0){
+            $this->error('无权限编辑本项目');
+        }
+        //删除
+        $projectService->delApiParam($paramID);
+        $this->success('删除成功');
+
+
     }
 }
